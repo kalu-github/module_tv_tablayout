@@ -3,7 +3,7 @@
 #
 #### preview
 
-![image](https://github.com/153437803/module_tv_layout/blob/master/preview.gif )
+![image](https://github.com/153437803/module_tv_tablayout/blob/master/preview.gif )
 
 #### api
 ```
