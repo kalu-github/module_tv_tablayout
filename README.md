@@ -1,7 +1,8 @@
+#
 #### preview
-
 ![image](https://github.com/153437803/module_tv_tablayout/blob/master/preview.gif )
 
+#
 #### api
 ```
 /**
@@ -23,6 +24,7 @@ public final <T extends TabModel> void update(@NonNull List<T> list)
 public final void select(int index, boolean anim)
 ```
 
+#
 #### data
 ```
 public interface TabModel {
