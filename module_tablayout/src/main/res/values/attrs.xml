@@ -1,0 +1,5 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <declare-styleable name="TabLayout">
+        <attr name="tl_scale" format="reference|float" />
+    </declare-styleable>
+</resources>
