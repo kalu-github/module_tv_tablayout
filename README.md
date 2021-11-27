@@ -26,7 +26,7 @@ public final <T extends TabModel> void update(@NonNull List<T> list)
 public final void select(int index, boolean anim)
 ```
 
-#### model
+#### data
 ```
 public interface TabModel {
 
