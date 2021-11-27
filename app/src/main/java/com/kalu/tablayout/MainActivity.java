@@ -22,18 +22,21 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         ArrayList<String> list1 = new ArrayList<>();
-        for (int i = 10; i < 40; i++) {
+        for (int i = 0; i < 20; i++) {
             int nextInt1 = new Random().nextInt(10);
             int nextInt2 = new Random().nextInt(10);
+            if (nextInt1 == nextInt2) {
+                nextInt2 = nextInt2 + 1;
+            }
             String substring = "哈哈世纪初开始了解从".substring(Math.min(nextInt1, nextInt2), Math.max(nextInt1, nextInt2));
             list1.add(substring);
         }
 
         ArrayList<TabModel> list = new ArrayList<>();
-        for (int i = 10; i < 40; i++) {
+        for (int i = 0; i < 20; i++) {
             TabModel temp;
-            String s = list1.get(i - 10);
-            if (i == 14) {
+            String s = list1.get(i);
+            if (i == 4) {
                 temp = new TabModelImage() {
                     @Override
                     public String[] initImageSrcUrls() {
