@@ -16,7 +16,10 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.annotation.DrawableRes;
 import androidx.annotation.NonNull;
+import androidx.appcompat.widget.DrawableUtils;
+import androidx.core.graphics.drawable.DrawableCompat;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -89,7 +92,7 @@ class TabUtil {
         if (null != colors && colors.length >= 3) {
             int[] color = activated ? colors[2] : (focus ? colors[1] : colors[0]);
             logE("updateImageBackground[colors]=> color = " + Arrays.toString(color));
-            loadColor(view, color, radius);
+            setBackgroundGradient(view, color, radius);
         }
         // 背景 => 网络图片
         else if (null != urls && urls.length >= 3) {
@@ -101,13 +104,13 @@ class TabUtil {
         else if (null != resources && resources.length >= 3) {
             int resId = activated ? resources[2] : (focus ? resources[1] : resources[0]);
             logE("updateImageBackground[resources]=> resId = " + resId);
-            loadImageResource(view, resId, true);
+            setBackgroundResource(view, resId, true);
         }
         // 背景 => 默认图片
         else {
             int resId = activated ? R.drawable.module_tablayout_ic_shape_background_select : (focus ? R.drawable.module_tablayout_ic_shape_background_focus : R.drawable.module_tablayout_ic_shape_background_normal);
             logE("updateImageBackground[defaults]=> resId = " + resId);
-            loadImageResource(view, resId, true);
+            setBackgroundResource(view, resId, true);
         }
     }
 
@@ -163,7 +166,7 @@ class TabUtil {
         if (null != colors && colors.length >= 3) {
             int[] color = activated ? colors[2] : (focus ? colors[1] : colors[0]);
             logE("updateTextBackground[colors]=> color = " + Arrays.toString(color) + ", text = " + view.getText());
-            loadColor(view, color, radius);
+            setBackgroundGradient(view, color, radius);
         }
         // 背景 => 网络图片
         else if (null != urls && urls.length >= 3) {
@@ -175,65 +178,27 @@ class TabUtil {
         else if (null != files && files.length >= 3) {
             String file = activated ? files[2] : (focus ? files[1] : files[0]);
             logE("updateTextBackground[files]=> file = " + file + ", text = " + view.getText());
-            loadImageFile(view, file, true);
+            setBackgroundFile(view, file, true);
         }
         // 背景 => Assets图片
         else if (null != assets && assets.length >= 3) {
             String path = activated ? assets[2] : (focus ? assets[1] : assets[0]);
             logE("updateTextBackground[assets]=> assets = " + path + ", text = " + view.getText());
-            loadImageAssets(view, path, true);
+            setBackgroundAssets(view, path, true);
         }
         // 背景 => 资源图片
         else if (null != resources && resources.length >= 3) {
             int resId = activated ? resources[2] : (focus ? resources[1] : resources[0]);
             logE("updateTextBackground[resources]=> resource = " + resId + ", text = " + view.getText());
-            loadImageResource(view, resId, true);
+            setBackgroundResource(view, resId, true);
         }
         // 背景 => 默认图片
         else {
             int resId = activated ? R.drawable.module_tablayout_ic_shape_background_select : (focus ? R.drawable.module_tablayout_ic_shape_background_focus : R.drawable.module_tablayout_ic_shape_background_normal);
             logE("updateTextBackground[defaults]=> resId = " + resId + ", text = " + view.getText());
-            loadImageResource(view, resId, true);
+            setBackgroundResource(view, resId, true);
         }
         logE("updateTextBackground => ************************");
-    }
-
-    public final static void loadImageResource(@NonNull final View view, @NonNull final int resId, final boolean isBackground) {
-        try {
-
-            String resourceName = view.getResources().getResourceName(resId);
-            logE("loadImageResource => resourceName = " + resourceName);
-
-            // img1
-            if (null != view && view instanceof ImageView && isBackground) {
-                ImageView imageView = (ImageView) view;
-                imageView.setBackgroundResource(resId);
-            }
-            // img2
-            else if (null != view && view instanceof ImageView) {
-                ImageView imageView = (ImageView) view;
-                imageView.setImageResource(resId);
-            }
-            // view
-            else if (null != view) {
-                view.setBackgroundResource(resId);
-            }
-        } catch (Exception e) {
-            logE("loadImageResource => " + e.getMessage());
-        }
-    }
-
-    public final static void loadColor(@NonNull final View view, @NonNull final int[] colors, float radius) {
-
-        if (null == colors || colors.length == 0)
-            return;
-
-        try {
-            GradientDrawable drawable = new GradientDrawable(GradientDrawable.Orientation.LEFT_RIGHT, colors);
-            drawable.setCornerRadius(radius);
-            view.setBackground(drawable);
-        } catch (Exception e) {
-        }
     }
 
     public final static void loadImageUrl(@NonNull final View view, @NonNull final String imageUrl, final boolean isBackground) {
@@ -271,7 +236,7 @@ class TabUtil {
 
             // 缓存
             if (tempFile.exists()) {
-                loadImageFile(view, path, isBackground);
+                setBackgroundFile(view, path, isBackground);
             }
             // 下载
             else {
@@ -316,100 +281,172 @@ class TabUtil {
                     bitmap.recycle();
 
                     // 3.主线程更新
-                    loadImageFile(view, filePath, isBackground);
+                    setBackgroundFile(view, filePath, isBackground);
                 } catch (Exception e) {
                 }
             }
         }).start();
     }
 
-    private final static void loadImageAssets(@NonNull final View view, @NonNull final String path, final boolean isBackground) {
+    private final static void setBackgroundAssets(@NonNull final View view, @NonNull final String path, final boolean isBackground) {
         try {
             if (Looper.myLooper() != Looper.getMainLooper()) {
                 view.post(new Runnable() {
                     @Override
                     public void run() {
-                        Drawable drawable = loadDrawable(view, path, true);
-                        loadImageDrawable(view, drawable, isBackground);
+                        Drawable drawable = decodeDrawable(view, path, true);
+                        setBackgroundDrawable(view, drawable, isBackground);
                     }
                 });
             } else {
-                Drawable drawable = loadDrawable(view, path, true);
-                loadImageDrawable(view, drawable, isBackground);
+                Drawable drawable = decodeDrawable(view, path, true);
+                setBackgroundDrawable(view, drawable, isBackground);
             }
         } catch (Exception e) {
         }
     }
 
-    private final static void loadImageFile(@NonNull final View view, @NonNull final String path, final boolean isBackground) {
+    private final static void setBackgroundFile(@NonNull final View view, @NonNull final String path, final boolean isBackground) {
         try {
             if (Looper.myLooper() != Looper.getMainLooper()) {
                 view.post(new Runnable() {
                     @Override
                     public void run() {
-                        Drawable drawable = loadDrawable(view, path, false);
-                        loadImageDrawable(view, drawable, isBackground);
+                        Drawable drawable = decodeDrawable(view, path, false);
+                        setBackgroundDrawable(view, drawable, isBackground);
                     }
                 });
             } else {
-                Drawable drawable = loadDrawable(view, path, false);
-                loadImageDrawable(view, drawable, isBackground);
+                Drawable drawable = decodeDrawable(view, path, false);
+                setBackgroundDrawable(view, drawable, isBackground);
             }
         } catch (Exception e) {
         }
     }
 
-    private final static Drawable loadDrawable(@NonNull View view, @NonNull String path, boolean isAssets) {
+    private final static Drawable decodeDrawable(@NonNull View view, @NonNull String absolutePath, boolean isAssets) {
+
+        Drawable drawable = null;
+        InputStream inputStream = null;
 
         try {
 
-            InputStream is = null;
+            if (null != absolutePath && absolutePath.length() > 0) {
 
-            // Assets
-            if (isAssets) {
-                try {
-                    is = view.getContext().getAssets().open(path);
-                } catch (Exception e) {
+                Resources resources = view.getResources();
+                if (isAssets) {
+                    inputStream = resources.getAssets().open(absolutePath);
+                } else {
+                    inputStream = new FileInputStream(absolutePath);
+                }
+
+                // .9
+                if (absolutePath.endsWith(".9.png")) {
+                    Context context = view.getContext().getApplicationContext();
+                    drawable = NinePatchChunk.create9PatchDrawable(context, inputStream, null);
+                }
+                // not .9
+                else {
+                    Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
+                    drawable = new BitmapDrawable(resources, bitmap);
                 }
             }
-            // File
-            else {
-                is = new FileInputStream(path);
-            }
+        } catch (Exception e) {
+            logE("decodeDrawable[exception] => " + e.getMessage());
+        }
 
-            Bitmap bitmap = BitmapFactory.decodeStream(is);
-            if (null != is) {
-                is.close();
-            }
-
-            // .9
-            if (path.endsWith(".9.png")) {
-                NinePatchDrawable drawable = NinePatchChunk.create9PatchDrawable(view.getContext(), bitmap, null);
-                logE("loadDrawable[assets=.9] => path = " + path + ", drawable = " + drawable);
-                return drawable;
-            }
-            // img
-            else {
-                BitmapDrawable drawable = new BitmapDrawable(view.getResources(), bitmap);
-                logE("loadDrawable[file] => path = " + path + ", drawable = " + drawable);
-                return drawable;
+        try {
+            if (null != inputStream) {
+                inputStream.close();
             }
         } catch (Exception e) {
-            logE("loadDrawable[Exception] => path = " + path + ", error = " + e.getMessage());
-            return null;
+        }
+
+        if (view instanceof TextView) {
+            logE("decodeDrawable => absolutePath = " + absolutePath + ", drawable = " + drawable + ", text = " + ((TextView) view).getText());
+        } else {
+            logE("decodeDrawable => absolutePath = " + absolutePath + ", drawable = " + drawable);
+        }
+        return drawable;
+    }
+
+    /*********************************/
+
+    public final static void setBackgroundGradient(@NonNull View view, @NonNull final int[] colors, float radius) {
+
+        if (null == colors || colors.length == 0)
+            return;
+
+        try {
+            GradientDrawable drawable = new GradientDrawable(GradientDrawable.Orientation.LEFT_RIGHT, colors);
+            drawable.setCornerRadius(radius);
+            view.setBackground(drawable);
+        } catch (Exception e) {
         }
     }
 
-    private final static void loadImageDrawable(@NonNull View view, @NonNull Drawable drawable, final boolean isBackground) {
+    public final static void setBackgroundResource(@NonNull final View view, @NonNull final int resId, final boolean isBackground) {
         try {
-            if (isBackground) {
-                view.setBackground(drawable);
-            } else if (view instanceof ImageView) {
+//            String resourceName = view.getResources().getResourceName(resId);
+//            logE("loadImageResource => resourceName = " + resourceName);
+
+            // img1
+            if (null != view && view instanceof ImageView && isBackground) {
                 ImageView imageView = (ImageView) view;
-                imageView.setImageDrawable(drawable);
+                imageView.setBackground(null);
+                imageView.setBackgroundResource(resId);
+                logE("setBackgroundResource => status = succ, view = " + view);
+            }
+            // img2
+            else if (null != view && view instanceof ImageView) {
+                ImageView imageView = (ImageView) view;
+                imageView.setImageDrawable(null);
+                imageView.setImageResource(resId);
+                logE("setBackgroundResource => status = succ, view = " + view);
+            }
+            // view
+            else if (null != view) {
+                view.setBackground(null);
+                view.setBackgroundResource(resId);
+                logE("setBackgroundResource => status = succ, view = " + view);
+            }
+            // fail
+            else {
+                logE("setBackgroundResource => status = fail, view = " + view);
             }
         } catch (Exception e) {
-            logE("loadImageDrawable => " + e.getMessage());
+            logE("setBackgroundResource => " + e.getMessage());
+        }
+    }
+
+    private final static void setBackgroundDrawable(@NonNull View view, @NonNull Drawable drawable, final boolean isBackground) {
+        try {
+            // img1
+            if (null != view && view instanceof ImageView && isBackground) {
+                ImageView imageView = (ImageView) view;
+                imageView.setBackground(null);
+                imageView.setBackground(drawable);
+                logE("setBackgroundDrawable => status = succ, view = " + view);
+            }
+            // img2
+            else if (null != view && view instanceof ImageView) {
+                ImageView imageView = (ImageView) view;
+                imageView.setImageDrawable(null);
+                imageView.setImageDrawable(drawable);
+                logE("setBackgroundDrawable => status = succ, view = " + view);
+            }
+            // view
+            else if (null != view) {
+                view.setBackground(null);
+                view.setBackground(drawable);
+                logE("setBackgroundDrawable => status = succ, view = " + view);
+            }
+            // fail
+            else {
+                logE("setBackgroundDrawable => status = fail, view = " + view);
+            }
+        } catch (Exception e) {
+            logE("setBackgroundDrawable => " + e.getMessage());
         }
     }
 }

@@ -133,3 +133,17 @@ public interface TabModel {
     int initImagePlaceholder();
 }
 ```
+
+#
+#### readme
+```
+1. 服务器下载的.9图必须是编译apk解压取出的.9图[编译过后没有黑线]
+```
+
+#
+#### update
+```
+******************
+2021-12-03
+1.添加.9图支持
+```
