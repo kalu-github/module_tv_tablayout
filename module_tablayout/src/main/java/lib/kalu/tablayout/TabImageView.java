@@ -103,9 +103,6 @@ class TabImageView extends ImageView {
                 temp2.recycle();
             }
             super.setImageDrawable(bitmapDrawable);
-            if (null != temp1) {
-                temp1.recycle();
-            }
         } catch (Exception e) {
         }
     }

@@ -87,6 +87,8 @@ class TabUtil {
         logE("updateImageBackground => ************************");
         String[] urls = t.initImageBackgroundUrls();
         logE("updateImageBackground => urls = " + Arrays.toString(urls));
+        String[] assets = t.initImageBackgroundAssets();
+        logE("updateImageBackground => assets = " + Arrays.toString(assets));
         int[] resources = t.initImageBackgroundResources();
         logE("updateImageBackground => resources = " + Arrays.toString(resources));
         int[][] colors = t.initImageBackgroundColors();
@@ -103,6 +105,12 @@ class TabUtil {
             String url = activated ? urls[2] : (focus ? urls[1] : urls[0]);
             logE("updateImageBackground[urls]=> url = " + url);
             loadImageUrl(view, url, true);
+        }
+        // 背景 => Assets图片
+        else if (null != assets && assets.length >= 3) {
+            String asset = activated ? assets[2] : (focus ? assets[1] : assets[0]);
+            logE("updateImageBackground[assets]=> asset = " + asset);
+            setBackgroundAssets(view, asset, true);
         }
         // 背景 => 资源图片
         else if (null != resources && resources.length >= 3) {

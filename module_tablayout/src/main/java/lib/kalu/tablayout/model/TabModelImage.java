@@ -59,6 +59,11 @@ public abstract class TabModelImage implements TabModel {
     }
 
     @Override
+    public String[] initImageBackgroundAssets() {
+        return null;
+    }
+
+    @Override
     public int[] initImageBackgroundResources() {
         return new int[]{R.drawable.module_tablayout_ic_shape_background_normal, R.drawable.module_tablayout_ic_shape_background_focus, R.drawable.module_tablayout_ic_shape_background_select};
     }
