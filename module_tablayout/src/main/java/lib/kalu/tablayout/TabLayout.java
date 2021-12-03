@@ -68,28 +68,28 @@ public class TabLayout extends HorizontalScrollView {
     public boolean dispatchKeyEvent(KeyEvent event) {
         if (event.getAction() == KeyEvent.ACTION_DOWN && event.getKeyCode() == KeyEvent.KEYCODE_DPAD_UP) {
             animClose();
-            updateSelect(View.FOCUS_UP, true);
+            updateSelect(View.FOCUS_UP, true, false);
             TabUtil.logE("dispatchKeyEvent[up-leave] => select = " + getSelect());
         } else if (event.getAction() == KeyEvent.ACTION_UP && event.getKeyCode() == KeyEvent.KEYCODE_DPAD_UP) {
             animStart();
-            updateSelect(View.FOCUS_UP, false);
+            updateSelect(View.FOCUS_UP, false, true);
             TabUtil.logE("dispatchKeyEvent[up-come] => select = " + getSelect());
             return true;
         } else if (event.getAction() == KeyEvent.ACTION_DOWN && event.getKeyCode() == KeyEvent.KEYCODE_DPAD_DOWN) {
             animClose();
-            updateSelect(View.FOCUS_DOWN, true);
+            updateSelect(View.FOCUS_DOWN, true, false);
             TabUtil.logE("dispatchKeyEvent[down-leave] => select = " + getSelect());
         } else if (event.getAction() == KeyEvent.ACTION_UP && event.getKeyCode() == KeyEvent.KEYCODE_DPAD_DOWN) {
             animStart();
-            updateSelect(View.FOCUS_DOWN, false);
+            updateSelect(View.FOCUS_DOWN, false, true);
             TabUtil.logE("dispatchKeyEvent[down-come] => select = " + getSelect());
             return true;
         } else if (event.getAction() == KeyEvent.ACTION_UP && event.getKeyCode() == KeyEvent.KEYCODE_DPAD_LEFT) {
-            updateSelect(View.FOCUS_LEFT, false);
+            updateSelect(View.FOCUS_LEFT, false, false);
             TabUtil.logE("dispatchKeyEvent[left] => select = " + getSelect());
             return true;
         } else if (event.getAction() == KeyEvent.ACTION_UP && event.getKeyCode() == KeyEvent.KEYCODE_DPAD_RIGHT) {
-            updateSelect(View.FOCUS_RIGHT, false);
+            updateSelect(View.FOCUS_RIGHT, false, false);
             TabUtil.logE("dispatchKeyEvent[right] => select = " + getSelect());
             return true;
         } else if (event.getAction() == KeyEvent.ACTION_DOWN && event.getKeyCode() == KeyEvent.KEYCODE_DPAD_LEFT) {
@@ -116,7 +116,7 @@ public class TabLayout extends HorizontalScrollView {
 
         int count = ((LinearLayout) container).getChildCount();
         int select = getSelect();
-        if (left && select == 0) {
+        if (left && select <= 0) {
             return true;
         } else if (!left && select + 1 >= count) {
             return true;
@@ -185,11 +185,11 @@ public class TabLayout extends HorizontalScrollView {
         try {
             return (int) getTag(getId());
         } catch (Exception e) {
-            return 0;
+            return -1;
         }
     }
 
-    private final void setSelect(int index, boolean leave) {
+    private final void setSelect(int index, boolean leave, boolean back) {
         if (index < 0)
             return;
         View container = getContainer();
@@ -198,21 +198,21 @@ public class TabLayout extends HorizontalScrollView {
             return;
 
         setTag(getId(), index);
-        updateFocus(leave);
+        updateFocus(leave, back);
     }
 
-    private final void updateSelect(int direction, boolean leave) {
+    private final void updateSelect(int direction, boolean leave, boolean back) {
         int select = getSelect();
         if (direction == View.FOCUS_LEFT) {
-            setSelect(select - 1, leave);
+            setSelect(select - 1, leave, back && select >= 0);
         } else if (direction == View.FOCUS_RIGHT) {
-            setSelect(select + 1, leave);
+            setSelect(select + 1, leave, back && select >= 0);
         } else {
-            setSelect(select, leave);
+            setSelect(select < 0 ? 0 : select, leave, back && select >= 0);
         }
     }
 
-    private final void updateFocus(boolean leave) {
+    private final void updateFocus(boolean leave, boolean back) {
         View container = getContainer();
         int count = ((LinearLayout) container).getChildCount();
         int select = getSelect();
@@ -226,8 +226,15 @@ public class TabLayout extends HorizontalScrollView {
                 TabUtil.logE("updateFocus[requestFocus] => select = " + select + ", temp = " + temp);
                 temp.requestFocus();
                 if (null != mOnTabChangeListener) {
-                    mOnTabChangeListener.onSelect(i);
+                    if (back) {
+                        mOnTabChangeListener.onRepeat(i);
+                    } else if (leave) {
+                        mOnTabChangeListener.onLeave(i);
+                    } else {
+                        mOnTabChangeListener.onSelect(i);
+                    }
                 }
+
             } else {
                 temp.clearFocus();
             }
@@ -368,7 +375,7 @@ public class TabLayout extends HorizontalScrollView {
         if (anim) {
             animStart();
         }
-        setSelect(index, false);
+        setSelect(index, false, true);
     }
 
     @Keep

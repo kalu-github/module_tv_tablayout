@@ -5,10 +5,12 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Random;
 
+import lib.kalu.tablayout.listener.OnTabChangeListener;
 import lib.kalu.tablayout.model.TabModel;
 import lib.kalu.tablayout.model.TabModelImage;
 import lib.kalu.tablayout.model.TabModelText;
@@ -86,6 +88,22 @@ public class MainActivity extends AppCompatActivity {
 
         lib.kalu.tablayout.TabLayout tabLayout = findViewById(R.id.tab_plus);
         tabLayout.update(list);
+        tabLayout.setOnTabChangeListener(new OnTabChangeListener() {
+            @Override
+            public void onSelect(int index) {
+                Toast.makeText(getApplicationContext(), "onSelect => " + index, Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onRepeat(int index) {
+                Toast.makeText(getApplicationContext(), "onRepeat => " + index, Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onLeave(int index) {
+                Toast.makeText(getApplicationContext(), "onLeave => " + index, Toast.LENGTH_SHORT).show();
+            }
+        });
 
         findViewById(R.id.four).setOnClickListener(new View.OnClickListener() {
             @Override
