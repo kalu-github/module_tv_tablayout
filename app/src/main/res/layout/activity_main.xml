@@ -20,44 +20,50 @@
         android:layout_height="60dp"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
-        app:tl_background_colors_radius="30dp"
+        app:tl_background_colors_radius="40dp"
         app:tl_margin="4dp"
         app:tl_padding="10dp"
         app:tl_scale="1.02"
-        app:tl_text_size="12sp"
+        app:tl_text_size="14sp"
         app:tl_text_underline="true"
         app:tl_text_underline_color="@android:color/holo_red_dark"
         app:tl_text_underline_height="3dp"
         app:tl_text_underline_width="14dp" />
 
-    <LinearLayout
+    <Button
+        android:id="@+id/five"
         android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:gravity="center"
-        android:orientation="horizontal">
-
-        <Button
-            android:id="@+id/five"
-            android:layout_width="100dp"
-            android:layout_height="match_parent"
-            android:layout_marginRight="5dp"
-            android:text="index => 5" />
-
-        <Button
-            android:id="@+id/four"
-            android:layout_width="100dp"
-            android:layout_height="match_parent"
-            android:layout_marginLeft="5dp"
-            android:text="index => 4" />
-
-
-    </LinearLayout>
+        android:layout_height="40dp"
+        android:text="选中 => 5" />
 
     <Button
+        android:id="@+id/four"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:focusable="true"
-        android:focusableInTouchMode="true"
-        android:text="bottom" />
+        android:layout_height="40dp"
+        android:text="选中 => 4" />
+
+    <Button
+        android:id="@+id/left1"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:text="左移 => 1" />
+
+    <Button
+        android:id="@+id/left2"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:text="左移 => 2" />
+
+    <Button
+        android:id="@+id/right1"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:text="右移 => 1" />
+
+    <Button
+        android:id="@+id/right2"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:text="右移 => 2" />
 
 </LinearLayout>

@@ -120,5 +120,37 @@ public class MainActivity extends AppCompatActivity {
                 tabLayout.select(4, true);
             }
         });
+
+        findViewById(R.id.left1).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                lib.kalu.tablayout.TabLayout tabLayout = findViewById(R.id.tab_plus);
+                tabLayout.left();
+            }
+        });
+
+        findViewById(R.id.left2).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                lib.kalu.tablayout.TabLayout tabLayout = findViewById(R.id.tab_plus);
+                tabLayout.left(2);
+            }
+        });
+
+        findViewById(R.id.right1).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                lib.kalu.tablayout.TabLayout tabLayout = findViewById(R.id.tab_plus);
+                tabLayout.right();
+            }
+        });
+
+        findViewById(R.id.right2).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                lib.kalu.tablayout.TabLayout tabLayout = findViewById(R.id.tab_plus);
+                tabLayout.right(2);
+            }
+        });
     }
 }

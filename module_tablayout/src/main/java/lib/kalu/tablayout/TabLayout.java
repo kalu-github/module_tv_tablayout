@@ -15,6 +15,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.annotation.IntRange;
 import androidx.annotation.Keep;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -181,15 +182,7 @@ public class TabLayout extends HorizontalScrollView {
         setDescendantFocusability(force ? FOCUS_BLOCK_DESCENDANTS : FOCUS_AFTER_DESCENDANTS);
     }
 
-    private final int getSelect() {
-        try {
-            return (int) getTag(getId());
-        } catch (Exception e) {
-            return -1;
-        }
-    }
-
-    private final void setSelect(int index, boolean leave, boolean back) {
+    private final void setSelect(int change, int index, boolean leave, boolean back) {
         if (index < 0)
             return;
         View container = getContainer();
@@ -198,21 +191,21 @@ public class TabLayout extends HorizontalScrollView {
             return;
 
         setTag(getId(), index);
-        updateFocus(leave, back);
+        updateFocus(change, leave, back);
     }
 
     private final void updateSelect(int direction, boolean leave, boolean back) {
         int select = getSelect();
         if (direction == View.FOCUS_LEFT) {
-            setSelect(select - 1, leave, back && select >= 0);
+            setSelect(select, select - 1, leave, back && select >= 0);
         } else if (direction == View.FOCUS_RIGHT) {
-            setSelect(select + 1, leave, back && select >= 0);
+            setSelect(select,select + 1, leave, back && select >= 0);
         } else {
-            setSelect(select < 0 ? 0 : select, leave, back && select >= 0);
+            setSelect(select,select < 0 ? 0 : select, leave, back && select >= 0);
         }
     }
 
-    private final void updateFocus(boolean leave, boolean back) {
+    private final void updateFocus(int change, boolean leave, boolean back) {
         View container = getContainer();
         int count = ((LinearLayout) container).getChildCount();
         int select = getSelect();
@@ -235,7 +228,7 @@ public class TabLayout extends HorizontalScrollView {
                     }
                 }
 
-            } else {
+            } else if(i == change) {
                 temp.clearFocus();
             }
         }
@@ -375,41 +368,68 @@ public class TabLayout extends HorizontalScrollView {
         if (anim) {
             animStart();
         }
-        setSelect(index, false, true);
+        setSelect(select, index, false, true);
     }
 
     @Keep
     public final void left() {
-        left(false);
+        left(1, false);
     }
 
     @Keep
     public final void left(boolean anim) {
+        left(1, anim);
+    }
+
+    @Keep
+    public final void left(@IntRange(from = 0, to = Integer.MAX_VALUE) int num) {
+        left(num, false);
+    }
+
+    @Keep
+    public final void left(@IntRange(from = 0, to = Integer.MAX_VALUE) int num, boolean anim) {
         int select = getSelect();
-        if (select == 0)
+        if (select <= 0)
             return;
 
-        int index = select - 1;
+        int index = select - num;
+        if (index < 0) {
+            index = 0;
+        }
         select(index, anim);
     }
 
     @Keep
     public final void right() {
-        right(false);
+        right(1, false);
     }
 
     @Keep
     public final void right(boolean anim) {
+        right(1, anim);
+    }
+
+    @Keep
+    public final void right(@IntRange(from = 0, to = Integer.MAX_VALUE) int num) {
+        right(num, false);
+    }
+
+    @Keep
+    public final void right(@IntRange(from = 0, to = Integer.MAX_VALUE) int num, boolean anim) {
         View container = getContainer();
         if (null == container || !(container instanceof LinearLayout))
             return;
 
         int count = ((LinearLayout) container).getChildCount();
         int select = getSelect();
-        if (select + 1 >= count)
+        if (select + 1 == count)
             return;
 
-        int index = select + 1;
+        if (select + num >= count) {
+            select = count - 1;
+        }
+
+        int index = select + num;
         select(index, anim);
     }
 
@@ -417,6 +437,15 @@ public class TabLayout extends HorizontalScrollView {
     public final boolean isSelect(@NonNull int index) {
         int select = getSelect();
         return select == index;
+    }
+
+    @Keep
+    public final int getSelect() {
+        try {
+            return (int) getTag(getId());
+        } catch (Exception e) {
+            return -1;
+        }
     }
 
     /************************************/
