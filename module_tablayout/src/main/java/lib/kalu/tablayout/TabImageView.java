@@ -8,30 +8,25 @@ import android.util.AttributeSet;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 
 @SuppressLint("AppCompatCustomView")
 class TabImageView extends ImageView {
 
-    public TabImageView(Context context) {
+    private float mPadding = 0f;
+    private float mMargin = 0f;
+
+    //    public TabImageView(@NonNull Context context) {
+//        super(context);
+//        init();
+//    }
+
+    public TabImageView(@NonNull Context context, @NonNull float padding, @NonNull float margin) {
         super(context);
-        init();
-    }
-
-    public TabImageView(Context context, @Nullable AttributeSet attrs) {
-        super(context, attrs);
-        init();
-    }
-
-    public TabImageView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
-        super(context, attrs, defStyleAttr);
-        init();
-    }
-
-    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
-    public TabImageView(Context context, @Nullable AttributeSet attrs, int defStyleAttr, int defStyleRes) {
-        super(context, attrs, defStyleAttr, defStyleRes);
+        this.mPadding = padding;
+        this.mMargin = margin;
         init();
     }
 
@@ -51,11 +46,18 @@ class TabImageView extends ImageView {
 
 //        LogUtils.e("AutoImageView", "onMeasure => width = " + width + ", height = " + height);
         setMeasuredDimension(width, height);
+
+        // padding
+        setPadding((int) mPadding, 0, (int) mPadding, 0);
+
+        // margin
         try {
-            int margin = (int) getResources().getDimension(R.dimen.module_tablayout_d4);
+            if (mMargin == 0f) {
+                mMargin = getResources().getDimension(R.dimen.module_tablayout_d4);
+            }
             LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) getLayoutParams();
-            params.rightMargin = margin;
-            params.leftMargin = margin;
+            params.rightMargin = (int) mMargin;
+            params.leftMargin = (int) mMargin;
         } catch (Exception e) {
         }
     }

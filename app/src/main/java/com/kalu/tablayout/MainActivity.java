@@ -2,15 +2,16 @@ package com.kalu.tablayout;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 
 import java.util.ArrayList;
 import java.util.Random;
 
-import lib.kalu.tablayout.TabModel;
-import lib.kalu.tablayout.TabModelImage;
-import lib.kalu.tablayout.TabModelText;
+import lib.kalu.tablayout.model.TabModel;
+import lib.kalu.tablayout.model.TabModelImage;
+import lib.kalu.tablayout.model.TabModelText;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -38,7 +39,17 @@ public class MainActivity extends AppCompatActivity {
                 temp = new TabModelImage() {
                     @Override
                     public String[] initImageSrcUrls() {
-                        return new String[]{"http://129.211.42.21:80/img/public/2021/e7cffa9ddf154e4b95092f8fdc84a798.png", "http://129.211.42.21:80/img/public/2021/4884e1f436b84f3fb767b0eff425ce45.png", "https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fimg.zcool.cn%2Fcommunity%2F011d425c98e2e0a801214168588459.jpg%401280w_1l_2o_100sh.jpg&refer=http%3A%2F%2Fimg.zcool.cn&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1640452367&t=d1f620e8a51f97f52602f0be1452562b"};
+                        return new String[]{"http://129.211.42.21:80/img/public/2021/e7cffa9ddf154e4b95092f8fdc84a798.png", "http://129.211.42.21:80/img/public/2021/4884e1f436b84f3fb767b0eff425ce45.png", "http://129.211.42.21/img/public/2021/6079d10f913240ae8458bc68530fba11.png"};
+                    }
+
+//                    @Override
+//                    public int[][] initImageBackgroundColors() {
+//                        return new int[][]{new int[]{Color.GREEN, Color.BLUE, Color.WHITE}, new int[]{Color.GREEN, Color.BLUE, Color.YELLOW}, new int[]{Color.GREEN, Color.BLUE, Color.BLACK}};
+//                    }
+
+                    @Override
+                    public int[] initImageBackgroundResources() {
+                        return new int[]{R.drawable.module_tablayout_ic_shape_background_normal, R.drawable.ic_test, R.drawable.module_tablayout_ic_shape_background_select};
                     }
                 };
             } else {
@@ -46,6 +57,21 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public String initText() {
                         return s;
+                    }
+
+                    @Override
+                    public int[] initTextColors() {
+                        return new int[]{Color.BLACK, Color.WHITE, Color.GREEN};
+                    }
+
+//                    @Override
+//                    public int[][] initTextBackgroundColors() {
+//                        return new int[][]{new int[]{Color.GREEN, Color.BLUE, Color.WHITE}, new int[]{Color.GREEN, Color.BLUE, Color.YELLOW}, new int[]{Color.GREEN, Color.BLUE, Color.BLACK}};
+//                    }
+
+                    @Override
+                    public int[] initTextBackgroundResources() {
+                        return new int[]{R.drawable.module_tablayout_ic_shape_background_normal, R.drawable.ic_test, R.drawable.module_tablayout_ic_shape_background_select};
                     }
                 };
             }

@@ -4,6 +4,11 @@ plugins {
 
 android {
     compileSdk 31
+    defaultConfig {
+        minSdk 19
+        targetSdk 31
+    }
+
     buildTypes {
         release {
             minifyEnabled true
@@ -30,5 +35,5 @@ android {
 }
 
 dependencies {
-    implementation 'androidx.appcompat:appcompat:1.2.0'
+    implementation 'androidx.appcompat:appcompat:1.4.0'
 }

@@ -20,6 +20,9 @@
         android:layout_height="60dp"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
+        app:tl_background_colors_radius="30dp"
+        app:tl_margin="4dp"
+        app:tl_padding="30dp"
         app:tl_scale="1.02" />
 
     <LinearLayout

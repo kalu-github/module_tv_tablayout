@@ -1,4 +1,4 @@
-package lib.kalu.tablayout;
+package lib.kalu.tablayout.model;
 
 import androidx.annotation.DrawableRes;
 import androidx.annotation.Keep;
@@ -37,6 +37,15 @@ public interface TabModel {
     int[] initTextColors();
 
     /**
+     * 0: 默认文字背景颜色, 支持渐变背景色
+     * 1：焦点文字背景颜色, 支持渐变背景色
+     * 2：选中文字背景颜色, 支持渐变背景色
+     *
+     * @return
+     */
+    int[][] initTextBackgroundColors();
+
+    /**
      * 0: 默认文字背景网络图片 => 首先图片下载本地, 之后本地缓存拿
      * 1：焦点文字背景网络图片 => 首先图片下载本地, 之后本地缓存拿
      * 2：选中文字背景网络图片 => 首先图片下载本地, 之后本地缓存拿
@@ -46,13 +55,22 @@ public interface TabModel {
     String[] initTextBackgroundUrls();
 
     /**
-     * 0: 默认文字背景本地图片
-     * 1：焦点文字背景本地图片
-     * 2：选中文字背景本地图片
+     * 0: 默认图片背景Assets图片
+     * 1：焦点图片背景Assets图片
+     * 2：选中图片背景Assets图片
      *
      * @return
      */
-    int[] initTextBackgroundResources();
+    String[] initTextBackgroundAssets();
+
+    /**
+     * 0: 默认图片背景本地图片
+     * 1：焦点图片背景本地图片
+     * 2：选中图片背景本地图片
+     *
+     * @return
+     */
+    String[] initTextBackgroundFiles();
 
     /**
      * 0: 默认文字背景本地图片
@@ -61,7 +79,7 @@ public interface TabModel {
      *
      * @return
      */
-    int[] initTextBackgroundDefaults();
+    int[] initTextBackgroundResources();
 
     /****************************/
 
@@ -73,6 +91,15 @@ public interface TabModel {
      * @return
      */
     String[] initImageSrcUrls();
+
+    /**
+     * 0: 默认图片背景颜色, 支持渐变背景色
+     * 1：焦点图片背景颜色, 支持渐变背景色
+     * 2：选中图片背景颜色, 支持渐变背景色
+     *
+     * @return
+     */
+    int[][] initImageBackgroundColors();
 
     /**
      * 0: 默认图片背景网络图片 => 首先图片下载本地, 之后本地缓存拿
@@ -91,15 +118,6 @@ public interface TabModel {
      * @return
      */
     int[] initImageBackgroundResources();
-
-    /**
-     * 0: 默认图片背景本地图片
-     * 1：焦点图片背景本地图片
-     * 2：选中图片背景本地图片
-     *
-     * @return
-     */
-    int[] initImageBackgroundDefaults();
 
     /**
      * 占位图

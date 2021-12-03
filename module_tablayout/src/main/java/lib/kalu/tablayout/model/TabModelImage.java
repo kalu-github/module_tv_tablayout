@@ -1,6 +1,8 @@
-package lib.kalu.tablayout;
+package lib.kalu.tablayout.model;
 
 import androidx.annotation.Keep;
+
+import lib.kalu.tablayout.R;
 
 @Keep
 public abstract class TabModelImage implements TabModel {
@@ -25,17 +27,27 @@ public abstract class TabModelImage implements TabModel {
     }
 
     @Override
+    public int[][] initTextBackgroundColors() {
+        return null;
+    }
+
+    @Override
     public String[] initTextBackgroundUrls() {
         return null;
     }
 
     @Override
-    public int[] initTextBackgroundDefaults() {
+    public int[] initTextBackgroundResources() {
         return null;
     }
 
     @Override
-    public int[] initTextBackgroundResources() {
+    public String[] initTextBackgroundFiles() {
+        return null;
+    }
+
+    @Override
+    public String[] initTextBackgroundAssets() {
         return null;
     }
 
@@ -47,17 +59,17 @@ public abstract class TabModelImage implements TabModel {
     }
 
     @Override
+    public int[][] initImageBackgroundColors() {
+        return null;
+    }
+
+    @Override
     public String[] initImageBackgroundUrls() {
         return null;
     }
 
     @Override
     public int[] initImageBackgroundResources() {
-        return new int[]{R.drawable.module_tablayout_ic_shape_background_normal, R.drawable.module_tablayout_ic_shape_background_focus, R.drawable.module_tablayout_ic_shape_background_select};
-    }
-
-    @Override
-    public int[] initImageBackgroundDefaults() {
         return new int[]{R.drawable.module_tablayout_ic_shape_background_normal, R.drawable.module_tablayout_ic_shape_background_focus, R.drawable.module_tablayout_ic_shape_background_select};
     }
 }

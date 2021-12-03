@@ -2,38 +2,30 @@ package lib.kalu.tablayout;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.graphics.Rect;
 import android.os.Build;
-import android.text.TextUtils;
 import android.util.AttributeSet;
-import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 
 @SuppressLint("AppCompatCustomView")
 class TabTextView extends TextView {
 
-    public TabTextView(Context context) {
+    private float mPadding = 0f;
+    private float mMargin = 0f;
+
+//    public TabTextView(@NonNull Context context) {
+//        super(context);
+//        init();
+//    }
+
+    public TabTextView(@NonNull Context context, @NonNull float padding, @NonNull float margin) {
         super(context);
-        init();
-    }
-
-    public TabTextView(Context context, @Nullable AttributeSet attrs) {
-        super(context, attrs);
-        init();
-    }
-
-    public TabTextView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
-        super(context, attrs, defStyleAttr);
-        init();
-    }
-
-    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
-    public TabTextView(Context context, @Nullable AttributeSet attrs, int defStyleAttr, int defStyleRes) {
-        super(context, attrs, defStyleAttr, defStyleRes);
+        this.mPadding = padding;
+        this.mMargin = margin;
         init();
     }
 
@@ -41,15 +33,22 @@ class TabTextView extends TextView {
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         int height = MeasureSpec.getSize(heightMeasureSpec);
         CharSequence text = getText();
+
         int measureText = (int) getPaint().measureText(String.valueOf(text));
-        int padding = measureText / text.length();
-        int width = measureText + padding * 2;
+        if (mPadding == 0) {
+            mPadding = measureText / text.length();
+        }
+        int width = (int) (measureText + mPadding * 1.5);
         setMeasuredDimension(width, height);
+
+        // margin
         try {
-            int margin = (int) getResources().getDimension(R.dimen.module_tablayout_d4);
+            if (mMargin == 0f) {
+                mMargin = getResources().getDimension(R.dimen.module_tablayout_d4);
+            }
             LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) getLayoutParams();
-            params.rightMargin = margin;
-            params.leftMargin = margin;
+            params.rightMargin = (int) mMargin;
+            params.leftMargin = (int) mMargin;
         } catch (Exception e) {
         }
     }

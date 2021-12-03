@@ -1,9 +1,11 @@
-package lib.kalu.tablayout;
+package lib.kalu.tablayout.model;
 
 import android.graphics.Color;
 import android.view.Gravity;
 
 import androidx.annotation.Keep;
+
+import lib.kalu.tablayout.R;
 
 @Keep
 public abstract class TabModelText implements TabModel {
@@ -14,7 +16,7 @@ public abstract class TabModelText implements TabModel {
     }
 
     @Override
-    public int[] initImageBackgroundDefaults() {
+    public int[][] initImageBackgroundColors() {
         return null;
     }
 
@@ -51,17 +53,26 @@ public abstract class TabModelText implements TabModel {
     }
 
     @Override
+    public int[][] initTextBackgroundColors() {
+        return null;
+    }
+
+    @Override
     public String[] initTextBackgroundUrls() {
-        return new String[0];
+        return null;
+    }
+
+    public String[] initTextBackgroundAssets() {
+        return null;
+    }
+
+    @Override
+    public String[] initTextBackgroundFiles() {
+        return null;
     }
 
     @Override
     public int[] initTextBackgroundResources() {
-        return new int[]{R.drawable.module_tablayout_ic_shape_background_normal, R.drawable.module_tablayout_ic_shape_background_focus, R.drawable.module_tablayout_ic_shape_background_select};
-    }
-
-    @Override
-    public int[] initTextBackgroundDefaults() {
         return new int[]{R.drawable.module_tablayout_ic_shape_background_normal, R.drawable.module_tablayout_ic_shape_background_focus, R.drawable.module_tablayout_ic_shape_background_select};
     }
 }

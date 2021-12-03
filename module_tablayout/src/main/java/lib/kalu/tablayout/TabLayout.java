@@ -21,6 +21,9 @@ import androidx.core.view.ViewCompat;
 
 import java.util.List;
 
+import lib.kalu.tablayout.listener.OnTabChangeListener;
+import lib.kalu.tablayout.model.TabModel;
+
 /**
  * TabLayout for TV
  */
@@ -28,6 +31,9 @@ import java.util.List;
 public class TabLayout extends HorizontalScrollView {
 
     private float mScale = 1f;
+    private float mMargin = 0f;
+    private float mPadding = 0f;
+    private float mBackgroundColorsRadius = 0f;
 
     public TabLayout(Context context) {
         super(context);
@@ -78,11 +84,39 @@ public class TabLayout extends HorizontalScrollView {
             updateSelect(View.FOCUS_RIGHT, false);
             TabUtil.logE("dispatchKeyEvent[right] => select = " + getSelect());
             return true;
+        } else if (event.getAction() == KeyEvent.ACTION_DOWN && event.getKeyCode() == KeyEvent.KEYCODE_DPAD_LEFT) {
+            boolean outside = isOutside(true);
+            if (outside) {
+                return true;
+            }
+        } else if (event.getAction() == KeyEvent.ACTION_DOWN && event.getKeyCode() == KeyEvent.KEYCODE_DPAD_RIGHT) {
+            boolean outside = isOutside(false);
+            if (outside) {
+                return true;
+            }
         }
         return super.dispatchKeyEvent(event);
     }
 
     /************************************/
+
+    private final boolean isOutside(boolean left) {
+
+        View container = getContainer();
+        if (null == container || !(container instanceof LinearLayout))
+            return false;
+
+        int count = ((LinearLayout) container).getChildCount();
+        int select = getSelect();
+        if (left && select == 0) {
+            return true;
+        } else if (!left && select + 1 >= count) {
+            return true;
+        } else {
+            return false;
+        }
+
+    }
 
     private final void init(@Nullable AttributeSet attrs) {
 
@@ -90,6 +124,9 @@ public class TabLayout extends HorizontalScrollView {
         try {
             attributes = getContext().obtainStyledAttributes(attrs, R.styleable.TabLayout);
             mScale = attributes.getFloat(R.styleable.TabLayout_tl_scale, 1f);
+            mMargin = attributes.getDimension(R.styleable.TabLayout_tl_margin, 0f);
+            mPadding = attributes.getDimension(R.styleable.TabLayout_tl_padding, 0f);
+            mBackgroundColorsRadius = attributes.getDimension(R.styleable.TabLayout_tl_background_colors_radius, 0f);
         } catch (Exception e) {
         }
 
@@ -174,6 +211,9 @@ public class TabLayout extends HorizontalScrollView {
             if (i == select) {
                 TabUtil.logE("updateFocus[requestFocus] => select = " + select + ", temp = " + temp);
                 temp.requestFocus();
+                if (null != mOnTabChangeListener) {
+                    mOnTabChangeListener.onSelect(i);
+                }
             } else {
                 temp.clearFocus();
             }
@@ -184,7 +224,7 @@ public class TabLayout extends HorizontalScrollView {
         return getChildAt(0);
     }
 
-    private final <T extends TabModel> void addContainerText(@NonNull TextView view, @NonNull T t) {
+    private final <T extends TabModel> void addContainerText(@NonNull final TextView view, @NonNull final T t) {
         View container = getContainer();
         if (null == container || !(container instanceof LinearLayout))
             return;
@@ -198,12 +238,12 @@ public class TabLayout extends HorizontalScrollView {
             public void onFocusChange(View v, boolean b) {
                 TabUtil.logE("addContainerText => focus = " + b);
                 updateFocusability(true);
-                TabUtil.updateTextUI(view, t);
+                TabUtil.updateTextUI(view, t, mBackgroundColorsRadius);
             }
         });
     }
 
-    private final <T extends TabModel> void addContainerImage(@NonNull ImageView view, @NonNull T t) {
+    private final <T extends TabModel> void addContainerImage(@NonNull final ImageView view, @NonNull final T t) {
         View container = getContainer();
         if (null == container || !(container instanceof LinearLayout))
             return;
@@ -217,7 +257,7 @@ public class TabLayout extends HorizontalScrollView {
             public void onFocusChange(View v, boolean b) {
                 TabUtil.logE("addContainerImage => focus = " + b);
                 updateFocusability(true);
-                TabUtil.updateImageUI(view, t);
+                TabUtil.updateImageUI(view, t, mBackgroundColorsRadius);
             }
         });
     }
@@ -232,11 +272,11 @@ public class TabLayout extends HorizontalScrollView {
         if (null == container)
             return;
 
-        TabTextView view = new TabTextView(getContext());
+        TabTextView view = new TabTextView(getContext(), mPadding, mMargin);
         view.setLayoutParams(new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.MATCH_PARENT));
 
         // ui
-        TabUtil.updateTextUI(view, t);
+        TabUtil.updateTextUI(view, t, mBackgroundColorsRadius);
 
         // addView
         addContainerText(view, t);
@@ -247,11 +287,11 @@ public class TabLayout extends HorizontalScrollView {
         if (null == t)
             return;
 
-        TabImageView view = new TabImageView(getContext());
+        TabImageView view = new TabImageView(getContext(), mPadding, mMargin);
         view.setLayoutParams(new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.MATCH_PARENT));
 
         // ui
-        TabUtil.updateImageUI(view, t);
+        TabUtil.updateImageUI(view, t, mBackgroundColorsRadius);
 
         // addView
         addContainerImage(view, t);
@@ -315,5 +355,54 @@ public class TabLayout extends HorizontalScrollView {
             animStart();
         }
         setSelect(index, false);
+    }
+
+    @Keep
+    public final void left() {
+        left(false);
+    }
+
+    @Keep
+    public final void left(boolean anim) {
+        int select = getSelect();
+        if (select == 0)
+            return;
+
+        int index = select - 1;
+        select(index, anim);
+    }
+
+    @Keep
+    public final void right() {
+        right(false);
+    }
+
+    @Keep
+    public final void right(boolean anim) {
+        View container = getContainer();
+        if (null == container || !(container instanceof LinearLayout))
+            return;
+
+        int count = ((LinearLayout) container).getChildCount();
+        int select = getSelect();
+        if (select + 1 >= count)
+            return;
+
+        int index = select + 1;
+        select(index, anim);
+    }
+
+    @Keep
+    public final boolean isSelect(@NonNull int index) {
+        int select = getSelect();
+        return select == index;
+    }
+
+    /************************************/
+
+    public OnTabChangeListener mOnTabChangeListener;
+
+    public final void setOnTabChangeListener(@NonNull OnTabChangeListener listener) {
+        this.mOnTabChangeListener = listener;
     }
 }
