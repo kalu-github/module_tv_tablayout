@@ -7,20 +7,6 @@ import androidx.annotation.Keep;
 public interface TabModel {
 
     /**
-     * 文字剧中显示
-     *
-     * @return
-     */
-    int initTextGravity();
-
-    /**
-     * 文字大小
-     *
-     * @return
-     */
-    int initTextSize();
-
-    /**
      * 文字内容
      *
      * @return

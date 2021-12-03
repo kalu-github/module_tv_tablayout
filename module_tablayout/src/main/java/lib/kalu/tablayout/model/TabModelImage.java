@@ -17,16 +17,6 @@ public abstract class TabModelImage implements TabModel {
     }
 
     @Override
-    public int initTextSize() {
-        return 0;
-    }
-
-    @Override
-    public int initTextGravity() {
-        return 0;
-    }
-
-    @Override
     public int[][] initTextBackgroundColors() {
         return null;
     }

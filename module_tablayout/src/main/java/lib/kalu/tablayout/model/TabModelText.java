@@ -38,16 +38,6 @@ public abstract class TabModelText implements TabModel {
     /**********************/
 
     @Override
-    public int initTextGravity() {
-        return Gravity.CENTER;
-    }
-
-    @Override
-    public int initTextSize() {
-        return 20;
-    }
-
-    @Override
     public int[] initTextColors() {
         return new int[]{Color.BLACK, Color.RED, Color.BLUE};
     }

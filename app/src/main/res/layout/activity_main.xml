@@ -22,8 +22,13 @@
         android:layout_marginRight="20dp"
         app:tl_background_colors_radius="30dp"
         app:tl_margin="4dp"
-        app:tl_padding="30dp"
-        app:tl_scale="1.02" />
+        app:tl_padding="10dp"
+        app:tl_scale="1.02"
+        app:tl_text_size="12sp"
+        app:tl_text_underline="true"
+        app:tl_text_underline_color="@android:color/holo_red_dark"
+        app:tl_text_underline_height="3dp"
+        app:tl_text_underline_width="14dp" />
 
     <LinearLayout
         android:layout_width="match_parent"

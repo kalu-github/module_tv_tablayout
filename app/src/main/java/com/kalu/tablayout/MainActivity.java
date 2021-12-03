@@ -47,10 +47,10 @@ public class MainActivity extends AppCompatActivity {
 //                        return new int[][]{new int[]{Color.GREEN, Color.BLUE, Color.WHITE}, new int[]{Color.GREEN, Color.BLUE, Color.YELLOW}, new int[]{Color.GREEN, Color.BLUE, Color.BLACK}};
 //                    }
 
-                    @Override
-                    public int[] initImageBackgroundResources() {
-                        return new int[]{R.drawable.module_tablayout_ic_shape_background_normal, R.drawable.ic_test, R.drawable.module_tablayout_ic_shape_background_select};
-                    }
+//                    @Override
+//                    public int[] initImageBackgroundResources() {
+//                        return new int[]{R.drawable.module_tablayout_ic_shape_background_normal, R.drawable.ic_test, R.drawable.module_tablayout_ic_shape_background_select};
+//                    }
                 };
             } else {
                 temp = new TabModelText() {
@@ -70,15 +70,15 @@ public class MainActivity extends AppCompatActivity {
 //                    }
 
 
-                    @Override
-                    public String[] initTextBackgroundAssets() {
-                        return new String[]{null, "2/test.9.png", null};
-                    }
+//                    @Override
+//                    public String[] initTextBackgroundAssets() {
+//                        return new String[]{null, "2/test.9.png", null};
+//                    }
 
-                    @Override
-                    public int[] initTextBackgroundResources() {
-                        return new int[]{R.drawable.module_tablayout_ic_shape_background_normal, R.drawable.ic_test, R.drawable.module_tablayout_ic_shape_background_select};
-                    }
+//                    @Override
+//                    public int[] initTextBackgroundResources() {
+//                        return new int[]{R.drawable.module_tablayout_ic_shape_background_normal, R.drawable.ic_test, R.drawable.module_tablayout_ic_shape_background_select};
+//                    }
                 };
             }
             list.add(temp);

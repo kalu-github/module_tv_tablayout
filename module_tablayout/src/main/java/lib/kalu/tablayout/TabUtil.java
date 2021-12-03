@@ -119,9 +119,7 @@ class TabUtil {
         if (null == t || null == view)
             return;
 
-        view.setGravity(t.initTextGravity());
         view.setText(t.initText());
-        view.setTextSize(t.initTextSize());
 
         updateTextColor(view, t);
         updateTextBackground(view, t, radius);

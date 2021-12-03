@@ -3,8 +3,10 @@ package lib.kalu.tablayout;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.graphics.Color;
 import android.os.Build;
 import android.util.AttributeSet;
+import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,6 +36,12 @@ public class TabLayout extends HorizontalScrollView {
     private float mMargin = 0f;
     private float mPadding = 0f;
     private float mBackgroundColorsRadius = 0f;
+
+    private boolean mTextUnderline = false;
+    private int mTextUnderlineColor = Color.TRANSPARENT;
+    private float mTextUnderlineWidth = 0;
+    private float mTextUnderlineHeight = 0;
+    private float mTextSize = 10f;
 
     public TabLayout(Context context) {
         super(context);
@@ -127,6 +135,11 @@ public class TabLayout extends HorizontalScrollView {
             mMargin = attributes.getDimension(R.styleable.TabLayout_tl_margin, 0f);
             mPadding = attributes.getDimension(R.styleable.TabLayout_tl_padding, 0f);
             mBackgroundColorsRadius = attributes.getDimension(R.styleable.TabLayout_tl_background_colors_radius, 0f);
+            mTextUnderline = attributes.getBoolean(R.styleable.TabLayout_tl_text_underline, false);
+            mTextUnderlineColor = attributes.getColor(R.styleable.TabLayout_tl_text_underline_color, Color.TRANSPARENT);
+            mTextUnderlineWidth = attributes.getDimension(R.styleable.TabLayout_tl_text_underline_width, 0f);
+            mTextUnderlineHeight = attributes.getDimension(R.styleable.TabLayout_tl_text_underline_height, 0f);
+            mTextSize = attributes.getDimension(R.styleable.TabLayout_tl_text_size, 10f);
         } catch (Exception e) {
         }
 
@@ -135,6 +148,7 @@ public class TabLayout extends HorizontalScrollView {
         }
 
         updateFocusability(true);
+        setSmoothScrollingEnabled(false);
         setHorizontalScrollBarEnabled(false);
         setWillNotDraw(true);
         setLongClickable(false);
@@ -272,7 +286,7 @@ public class TabLayout extends HorizontalScrollView {
         if (null == container)
             return;
 
-        TabTextView view = new TabTextView(getContext(), mPadding, mMargin);
+        TabTextView view = new TabTextView(getContext(), mPadding, mMargin, mTextUnderline, mTextUnderlineColor, mTextUnderlineWidth, mTextUnderlineHeight, mTextSize);
         view.setLayoutParams(new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.MATCH_PARENT));
 
         // ui
