@@ -42,6 +42,9 @@ class TabUtil {
 
     public static final void logE(@NonNull String message) {
 
+        if (BuildConfig.DEBUG)
+            return;
+
         if (null == message || message.length() == 0)
             return;
 
@@ -81,6 +84,7 @@ class TabUtil {
         boolean focus = view.hasFocus();
         boolean activated = view.isActivated();
 
+        logE("updateImageBackground => ************************");
         String[] urls = t.initImageBackgroundUrls();
         logE("updateImageBackground => urls = " + Arrays.toString(urls));
         int[] resources = t.initImageBackgroundResources();
@@ -112,6 +116,7 @@ class TabUtil {
             logE("updateImageBackground[defaults]=> resId = " + resId);
             setBackgroundResource(view, resId, true);
         }
+        logE("updateImageBackground => ************************");
     }
 
     public static final <T extends TabModel> void updateTextUI(@NonNull TextView view, @NonNull T t, @NonNull float radius) {
