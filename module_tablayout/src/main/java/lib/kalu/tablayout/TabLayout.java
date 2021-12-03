@@ -86,24 +86,44 @@ public class TabLayout extends HorizontalScrollView {
             updateSelect(View.FOCUS_DOWN, false, true);
             TabUtil.logE("dispatchKeyEvent[down-come] => select = " + getSelect());
             return true;
-        } else if (event.getAction() == KeyEvent.ACTION_UP && event.getKeyCode() == KeyEvent.KEYCODE_DPAD_LEFT) {
+        }
+        // left repeat
+        else if (event.getRepeatCount() > 0 && event.getKeyCode() == KeyEvent.KEYCODE_DPAD_LEFT) {
+            TabUtil.logE("dispatchKeyEvent[left-repeat] => select = " + getSelect());
+            return true;
+        }
+        // left outside
+        else if (event.getAction() == KeyEvent.ACTION_DOWN && event.getKeyCode() == KeyEvent.KEYCODE_DPAD_LEFT) {
+            boolean outside = isOutside(true);
+            if (outside) {
+                TabUtil.logE("dispatchKeyEvent[left-outside] => select = " + getSelect());
+                return true;
+            }
+        }
+        // left
+        else if (event.getAction() == KeyEvent.ACTION_UP && event.getKeyCode() == KeyEvent.KEYCODE_DPAD_LEFT) {
             updateSelect(View.FOCUS_LEFT, false, false);
             TabUtil.logE("dispatchKeyEvent[left] => select = " + getSelect());
             return true;
-        } else if (event.getAction() == KeyEvent.ACTION_UP && event.getKeyCode() == KeyEvent.KEYCODE_DPAD_RIGHT) {
+        }
+        // right repeat
+        else if (event.getRepeatCount() > 0 && event.getKeyCode() == KeyEvent.KEYCODE_DPAD_RIGHT) {
+            TabUtil.logE("dispatchKeyEvent[right-repeat] => select = " + getSelect());
+            return true;
+        }
+        // right outside
+        else if (event.getAction() == KeyEvent.ACTION_DOWN && event.getKeyCode() == KeyEvent.KEYCODE_DPAD_RIGHT) {
+            boolean outside = isOutside(false);
+            if (outside) {
+                TabUtil.logE("dispatchKeyEvent[right-outside] => select = " + getSelect());
+                return true;
+            }
+        }
+        // right
+        else if (event.getAction() == KeyEvent.ACTION_UP && event.getKeyCode() == KeyEvent.KEYCODE_DPAD_RIGHT) {
             updateSelect(View.FOCUS_RIGHT, false, false);
             TabUtil.logE("dispatchKeyEvent[right] => select = " + getSelect());
             return true;
-        } else if (event.getAction() == KeyEvent.ACTION_DOWN && event.getKeyCode() == KeyEvent.KEYCODE_DPAD_LEFT) {
-            boolean outside = isOutside(true);
-            if (outside) {
-                return true;
-            }
-        } else if (event.getAction() == KeyEvent.ACTION_DOWN && event.getKeyCode() == KeyEvent.KEYCODE_DPAD_RIGHT) {
-            boolean outside = isOutside(false);
-            if (outside) {
-                return true;
-            }
         }
         return super.dispatchKeyEvent(event);
     }
