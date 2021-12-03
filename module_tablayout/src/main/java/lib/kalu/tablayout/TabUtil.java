@@ -29,6 +29,8 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.security.MessageDigest;
 import java.util.Arrays;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import lib.kalu.tablayout.model.TabModel;
 import lib.kalu.tablayout.model.TabModelImage;
@@ -39,6 +41,9 @@ import lib.kalu.tablayout.ninepatch.NinePatchChunk;
  * utils
  */
 class TabUtil {
+
+    // 最多可能会同时先后下载3张图片
+    private static final ExecutorService ES = Executors.newFixedThreadPool(3);
 
     public static final void logE(@NonNull String message) {
 
@@ -266,7 +271,8 @@ class TabUtil {
      * @param isBackground
      */
     private final static void downloadImage(@NonNull final View view, @NonNull final String filePath, @NonNull final String url, final boolean isBackground) {
-        new Thread(new Runnable() {
+
+        ES.submit(new Runnable() {
             @Override
             public void run() {
                 try {
@@ -296,7 +302,7 @@ class TabUtil {
                 } catch (Exception e) {
                 }
             }
-        }).start();
+        });
     }
 
     private final static void setBackgroundAssets(@NonNull final View view, @NonNull final String path, final boolean isBackground) {
