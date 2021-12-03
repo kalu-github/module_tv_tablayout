@@ -42,7 +42,7 @@ class TabUtil {
 
     public static final void logE(@NonNull String message) {
 
-        if (BuildConfig.DEBUG)
+        if (!BuildConfig.DEBUG)
             return;
 
         if (null == message || message.length() == 0)

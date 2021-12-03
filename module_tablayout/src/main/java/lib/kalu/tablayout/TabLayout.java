@@ -125,7 +125,6 @@ public class TabLayout extends HorizontalScrollView {
         } else {
             return false;
         }
-
     }
 
     private final void init(@Nullable AttributeSet attrs) {
