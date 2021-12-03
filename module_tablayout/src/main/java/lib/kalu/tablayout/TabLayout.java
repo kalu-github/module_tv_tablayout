@@ -14,6 +14,7 @@ import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.IntRange;
 import androidx.annotation.Keep;
@@ -199,9 +200,9 @@ public class TabLayout extends HorizontalScrollView {
         if (direction == View.FOCUS_LEFT) {
             setSelect(select, select - 1, leave, back && select >= 0);
         } else if (direction == View.FOCUS_RIGHT) {
-            setSelect(select,select + 1, leave, back && select >= 0);
+            setSelect(select, select + 1, leave, back && select >= 0);
         } else {
-            setSelect(select,select < 0 ? 0 : select, leave, back && select >= 0);
+            setSelect(select, select < 0 ? 0 : select, leave, back && select >= 0);
         }
     }
 
@@ -228,7 +229,7 @@ public class TabLayout extends HorizontalScrollView {
                     }
                 }
 
-            } else if(i == change) {
+            } else if (i == change) {
                 temp.clearFocus();
             }
         }
@@ -422,14 +423,14 @@ public class TabLayout extends HorizontalScrollView {
 
         int count = ((LinearLayout) container).getChildCount();
         int select = getSelect();
-        if (select + 1 == count)
+        Toast.makeText(getContext(), count + " = " + count + ", select = " + select, Toast.LENGTH_SHORT).show();
+        if (select + 1 >= count)
             return;
 
-        if (select + num >= count) {
-            select = count - 1;
-        }
-
         int index = select + num;
+        if (index >= count) {
+            index = count - 1;
+        }
         select(index, anim);
     }
 

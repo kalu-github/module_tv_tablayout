@@ -91,7 +91,7 @@ public class MainActivity extends AppCompatActivity {
         tabLayout.setOnTabChangeListener(new OnTabChangeListener() {
             @Override
             public void onSelect(int index) {
-                Toast.makeText(getApplicationContext(), "onSelect => " + index, Toast.LENGTH_SHORT).show();
+//                Toast.makeText(getApplicationContext(), "onSelect => " + index, Toast.LENGTH_SHORT).show();
             }
 
             @Override
