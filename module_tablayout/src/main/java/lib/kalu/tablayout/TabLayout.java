@@ -301,7 +301,9 @@ public class TabLayout extends HorizontalScrollView {
         if (null == t)
             return;
 
-        TabImageView view = new TabImageView(getContext(), mPadding, mMargin);
+        TabImageView view = new TabImageView(getContext());
+        view.setMargin(mMargin);
+        view.setPadding(mPadding);
         view.setLayoutParams(new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.MATCH_PARENT));
 
         // ui
