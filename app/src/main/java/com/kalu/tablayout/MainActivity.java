@@ -1,9 +1,13 @@
 package com.kalu.tablayout;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
@@ -21,6 +25,13 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        ArrayList<Fragment> list0 = new ArrayList<>();
+        for (int i = 0; i < 20; i++) {
+            MainFragment fragment = new MainFragment();
+            fragment.setText("fragment => " + i);
+            list0.add(fragment);
+        }
 
         ArrayList<String> list1 = new ArrayList<>();
         for (int i = 0; i < 20; i++) {
@@ -96,17 +107,21 @@ public class MainActivity extends AppCompatActivity {
         tabLayout.setOnTabChangeListener(new OnTabChangeListener() {
             @Override
             public void onSelect(int index) {
-//                Toast.makeText(getApplicationContext(), "onSelect => " + index, Toast.LENGTH_SHORT).show();
+                Log.e("MAINAA", "onSelect => index = " + index);
+                FragmentManager supportFragmentManager = getSupportFragmentManager();
+                FragmentTransaction fragmentTransaction = supportFragmentManager.beginTransaction();
+                fragmentTransaction.replace(R.id.content, list0.get(index));
+                fragmentTransaction.commit();
             }
 
             @Override
             public void onRepeat(int index) {
-                Toast.makeText(getApplicationContext(), "onRepeat => " + index, Toast.LENGTH_SHORT).show();
+                Log.e("MAINAA", "onRepeat => index = " + index);
             }
 
             @Override
             public void onLeave(int index) {
-                Toast.makeText(getApplicationContext(), "onLeave => " + index, Toast.LENGTH_SHORT).show();
+                Log.e("MAINAA", "onLeave => index = " + index);
             }
         });
 

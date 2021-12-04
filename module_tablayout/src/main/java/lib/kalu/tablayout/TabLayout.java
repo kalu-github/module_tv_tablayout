@@ -232,15 +232,20 @@ public class TabLayout extends HorizontalScrollView {
         View container = getContainer();
         int count = ((LinearLayout) container).getChildCount();
         int select = getSelect();
+        int num = 0;
         for (int i = 0; i < count; i++) {
-            View temp = ((LinearLayout) container).getChildAt(i);
-            if (null == temp)
+            if (num >= 2)
+                break;
+            View view = ((LinearLayout) container).getChildAt(i);
+            if (null == view)
                 continue;
             updateFocusability(false);
-            temp.setActivated(i == select && leave);
+            view.setActivated(i == select && leave);
+            // 强制获焦
             if (i == select) {
-                TabUtil.logE("updateFocus[requestFocus] => select = " + select + ", temp = " + temp);
-                temp.requestFocus();
+                TabUtil.logE("updateFocus[requestFocus] => select = " + select + ", view = " + view);
+                ++num;
+                view.requestFocus();
                 if (null != mOnTabChangeListener) {
                     if (back) {
                         mOnTabChangeListener.onRepeat(i);
@@ -250,9 +255,11 @@ public class TabLayout extends HorizontalScrollView {
                         mOnTabChangeListener.onSelect(i);
                     }
                 }
-
-            } else if (i == change) {
-                temp.clearFocus();
+            }
+            // 强制失焦
+            else if (i == change) {
+                ++num;
+                view.clearFocus();
             }
         }
     }
@@ -394,7 +401,7 @@ public class TabLayout extends HorizontalScrollView {
         if (anim) {
             animStart();
         }
-        setSelect(select, index, false, true);
+        setSelect(select, index, false, select == index);
     }
 
     @Keep
