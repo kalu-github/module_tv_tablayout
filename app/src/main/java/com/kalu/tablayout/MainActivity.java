@@ -129,7 +129,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 lib.kalu.tablayout.TabLayout tabLayout = findViewById(R.id.tab_plus);
-                tabLayout.select(3, true);
+                tabLayout.select(3, true, true);
             }
         });
 
@@ -137,7 +137,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 lib.kalu.tablayout.TabLayout tabLayout = findViewById(R.id.tab_plus);
-                tabLayout.select(4, true);
+                tabLayout.select(4, false, true);
             }
         });
 

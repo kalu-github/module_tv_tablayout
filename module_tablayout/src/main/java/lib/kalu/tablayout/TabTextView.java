@@ -32,15 +32,8 @@ class TabTextView extends TextView {
 //        init();
 //    }
 
-    public TabTextView(@NonNull Context context, @NonNull float padding, @NonNull float margin, boolean underline, int underlineColor, float underlineWidth, float underlineHeight, float size) {
+    public TabTextView(@NonNull Context context) {
         super(context);
-        this.mPadding = padding;
-        this.mMargin = margin;
-        this.mUnderline = underline;
-        this.mUnderlineColor = underlineColor;
-        this.mUnderlineWidth = underlineWidth;
-        this.mUnderlineHeight = underlineHeight;
-        this.mSize = size;
         init();
     }
 
@@ -129,6 +122,34 @@ class TabTextView extends TextView {
 //        setMinEms(2);
     }
 
+    protected final void setSize(float size) {
+        this.mSize = size;
+    }
+
+    protected final void setPadding(float padding) {
+        this.mPadding = padding;
+    }
+
+    protected final void setMargin(float margin) {
+        this.mMargin = margin;
+    }
+
+    protected final void setUnderline(boolean underline) {
+        this.mUnderline = underline;
+    }
+
+    protected final void setUnderlineColor(int color) {
+        this.mUnderlineColor = color;
+    }
+
+    protected final void setUnderlineWidth(float width) {
+        this.mUnderlineWidth = width;
+    }
+
+    protected final void setUnderlineHeight(float height) {
+        this.mUnderlineHeight = height;
+    }
+
     /*************************/
 
     private OnFocusChangeListener mOnFocusChangeListener;
@@ -139,7 +160,7 @@ class TabTextView extends TextView {
         super.setOnFocusChangeListener(l);
     }
 
-    public final void reset() {
+    protected final void reset() {
         setActivated(false);
         if (null != mOnFocusChangeListener) {
             mOnFocusChangeListener.onFocusChange(this, false);

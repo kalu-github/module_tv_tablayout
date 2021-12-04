@@ -101,21 +101,21 @@ public class TabLayout extends HorizontalScrollView {
     @Override
     public boolean dispatchKeyEvent(KeyEvent event) {
         if (event.getAction() == KeyEvent.ACTION_DOWN && event.getKeyCode() == KeyEvent.KEYCODE_DPAD_UP) {
-            animClose();
-            updateSelect(View.FOCUS_UP, true, false);
+            anim(true);
+            scroll(View.FOCUS_UP, true, false);
             TabUtil.logE("dispatchKeyEvent[up-leave] =>");
         } else if (event.getAction() == KeyEvent.ACTION_UP && event.getKeyCode() == KeyEvent.KEYCODE_DPAD_UP) {
-            animStart();
-            updateSelect(View.FOCUS_UP, false, true);
+            anim(false);
+            scroll(View.FOCUS_UP, false, true);
             TabUtil.logE("dispatchKeyEvent[up-come] =>");
             return true;
         } else if (event.getAction() == KeyEvent.ACTION_DOWN && event.getKeyCode() == KeyEvent.KEYCODE_DPAD_DOWN) {
-            animClose();
-            updateSelect(View.FOCUS_DOWN, true, false);
+            anim(true);
+            scroll(View.FOCUS_DOWN, true, false);
             TabUtil.logE("dispatchKeyEvent[down-leave] =>");
         } else if (event.getAction() == KeyEvent.ACTION_UP && event.getKeyCode() == KeyEvent.KEYCODE_DPAD_DOWN) {
-            animStart();
-            updateSelect(View.FOCUS_DOWN, false, true);
+            anim(false);
+            scroll(View.FOCUS_DOWN, false, true);
             TabUtil.logE("dispatchKeyEvent[down-come] =>");
             return true;
         }
@@ -134,7 +134,7 @@ public class TabLayout extends HorizontalScrollView {
         }
         // left
         else if (event.getAction() == KeyEvent.ACTION_UP && event.getKeyCode() == KeyEvent.KEYCODE_DPAD_LEFT) {
-            updateSelect(View.FOCUS_LEFT, false, false);
+            scroll(View.FOCUS_LEFT, false, false);
             TabUtil.logE("dispatchKeyEvent[left] =>");
             return true;
         }
@@ -153,7 +153,7 @@ public class TabLayout extends HorizontalScrollView {
         }
         // right
         else if (event.getAction() == KeyEvent.ACTION_UP && event.getKeyCode() == KeyEvent.KEYCODE_DPAD_RIGHT) {
-            updateSelect(View.FOCUS_RIGHT, false, false);
+            scroll(View.FOCUS_RIGHT, false, false);
             TabUtil.logE("dispatchKeyEvent[right] =>");
             return true;
         }
@@ -224,23 +224,26 @@ public class TabLayout extends HorizontalScrollView {
         addView(view, 0);
     }
 
-    private final void animStart() {
+    private final void anim(boolean over) {
         if (mScale <= 1f)
             return;
-        ViewCompat.animate(this).scaleX(mScale).scaleY(mScale).start();
-    }
-
-    private final void animClose() {
-        if (mScale <= 1f)
-            return;
-        ViewCompat.animate(this).scaleX(1f).scaleY(1f).start();
+        ViewCompat.animate(this).scaleX(over ? 1f : mScale).scaleY(over ? 1f : mScale).start();
     }
 
     private final void updateFocusability(boolean force) {
         setDescendantFocusability(force ? FOCUS_BLOCK_DESCENDANTS : FOCUS_AFTER_DESCENDANTS);
     }
 
-    private final void setSelect(int before, int next, boolean leave, boolean repeat) {
+    /**
+     * 强制选中
+     *
+     * @param before 旧索引位置
+     * @param next   新索引位置
+     * @param notify 通知
+     * @param leave  离开
+     * @param repeat 重复
+     */
+    private final void scroll(@IntRange(from = 0, to = Integer.MAX_VALUE) int before, @IntRange(from = 0, to = Integer.MAX_VALUE) int next, boolean notify, boolean leave, boolean repeat) {
         if (next < 0)
             return;
         View container = getContainer();
@@ -249,7 +252,21 @@ public class TabLayout extends HorizontalScrollView {
             return;
 
         updateIndex(next);
-        updateFocus(before, next, leave, repeat);
+        updateFocus(before, next, notify, leave, repeat);
+    }
+
+    private final void scroll(int direction, boolean leave, boolean repeat) {
+        int before = getIndex();
+        int next;
+        if (direction == View.FOCUS_LEFT) {
+            next = before - 1;
+        } else if (direction == View.FOCUS_RIGHT) {
+            next = before + 1;
+        } else {
+            next = before < 0 ? 0 : before;
+        }
+        TabUtil.logE("updateSelect => before = " + before + ", next = " + next);
+        scroll(before, next, true, leave, repeat && before >= 0);
     }
 
     /**
@@ -282,51 +299,53 @@ public class TabLayout extends HorizontalScrollView {
         }
     }
 
-    private final void updateSelect(int direction, boolean leave, boolean repeat) {
-        int before = getIndex();
-        int next;
-        if (direction == View.FOCUS_LEFT) {
-            next = before - 1;
-        } else if (direction == View.FOCUS_RIGHT) {
-            next = before + 1;
-        } else {
-            next = before < 0 ? 0 : before;
-        }
-        TabUtil.logE("updateSelect => before = " + before + ", next = " + next);
-        setSelect(before, next, leave, repeat && before >= 0);
-    }
-
-    private final void updateFocus(int before, int next, boolean leave, boolean back) {
+    /**
+     * 更新焦点状态
+     *
+     * @param before 旧索引位置
+     * @param next   新索引位置
+     * @param notify 通知
+     * @param leave  离开
+     * @param repeat 重复
+     */
+    private final void updateFocus(@IntRange(from = 0, to = Integer.MAX_VALUE) int before, @IntRange(from = 0, to = Integer.MAX_VALUE) int next, boolean notify, boolean leave, boolean repeat) {
         View container = getContainer();
         int count = ((LinearLayout) container).getChildCount();
         int num = 0;
         for (int i = 0; i < count; i++) {
-            if (num >= 2)
+            // over
+            if (num >= 2) {
+                TabUtil.logE("updateFocus[强制结束] => num = " + num);
                 break;
-            View view = ((LinearLayout) container).getChildAt(i);
-            if (null == view)
-                continue;
-            updateFocusability(false);
-            view.setActivated(i == next && leave);
-            // 强制获焦
-            if (i == next) {
-                TabUtil.logE("updateFocus[requestFocus] => select = " + next + ", view = " + view);
-                ++num;
-                view.requestFocus();
-                if (null != mOnTabChangeListener) {
-                    if (back) {
-                        mOnTabChangeListener.onRepeat(i);
-                    } else if (leave) {
-                        mOnTabChangeListener.onLeave(i);
-                    } else {
-                        mOnTabChangeListener.onSelect(i);
+            }
+            // scan
+            else {
+                View view = ((LinearLayout) container).getChildAt(i);
+                if (null == view)
+                    continue;
+                updateFocusability(false);
+                view.setActivated(i == next && leave);
+                // 强制获焦
+                if (i == next) {
+                    TabUtil.logE("updateFocus[强制获焦] => index = " + next + ", view = " + view);
+                    ++num;
+                    view.requestFocus();
+                    if (notify && null != mOnTabChangeListener) {
+                        if (repeat) {
+                            mOnTabChangeListener.onRepeat(i);
+                        } else if (leave) {
+                            mOnTabChangeListener.onLeave(i);
+                        } else {
+                            mOnTabChangeListener.onSelect(i);
+                        }
                     }
                 }
-            }
-            // 强制失焦
-            else if (i == before) {
-                ++num;
-                view.clearFocus();
+                // 强制失焦
+                else if (i == before) {
+                    TabUtil.logE("updateFocus[强制失焦] => index = " + before + ", view = " + view);
+                    ++num;
+                    view.clearFocus();
+                }
             }
         }
     }
@@ -347,7 +366,7 @@ public class TabLayout extends HorizontalScrollView {
         view.setOnFocusChangeListener(new OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean b) {
-                TabUtil.logE("addContainerText => focus = " + b);
+                TabUtil.logE("onFocusChange => focus = " + b + ", view = " + v);
                 updateFocusability(true);
                 TabUtil.updateTextUI(view, t, mBackgroundColorsRadius);
             }
@@ -366,7 +385,7 @@ public class TabLayout extends HorizontalScrollView {
         view.setOnFocusChangeListener(new OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean b) {
-                TabUtil.logE("addContainerImage => focus = " + b);
+                TabUtil.logE("onFocusChange => focus = " + b + ", view = " + v);
                 updateFocusability(true);
                 TabUtil.updateImageUI(view, t, mBackgroundColorsRadius);
             }
@@ -383,7 +402,14 @@ public class TabLayout extends HorizontalScrollView {
         if (null == container)
             return;
 
-        TabTextView view = new TabTextView(getContext(), mPadding, mMargin, mTextUnderline, mTextUnderlineColor, mTextUnderlineWidth, mTextUnderlineHeight, mTextSize);
+        TabTextView view = new TabTextView(getContext());
+        view.setPadding(mPadding);
+        view.setMargin(mMargin);
+        view.setTextSize(mTextSize);
+        view.setUnderline(mTextUnderline);
+        view.setUnderlineColor(mTextUnderlineColor);
+        view.setUnderlineWidth(mTextUnderlineWidth);
+        view.setUnderlineHeight(mTextUnderlineHeight);
         view.setLayoutParams(new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.MATCH_PARENT));
 
         // ui
@@ -439,22 +465,29 @@ public class TabLayout extends HorizontalScrollView {
         }
     }
 
+    @Keep
+    public final void select(@IntRange(from = 0, to = Integer.MAX_VALUE) int next) {
+        select(next, true, false);
+    }
+
     /**
      * 强制选中tab
      *
-     * @param index 索引位置
-     * @param anim  动画
+     * @param next   新索引位置
+     * @param notify 开启通知
+     * @param anim   开启动画
      */
     @Keep
-    public final void select(int index, boolean anim) {
+    public final void select(@IntRange(from = 0, to = Integer.MAX_VALUE) int next, boolean notify, boolean anim) {
 
-        int select = getIndex();
-        TabUtil.logE("select => select = " + select + ", index = " + index);
+        int before = getIndex();
+        TabUtil.logE("select => before = " + before + ", next = " + next);
 
-        if (select >= 0) {
+        // 复位
+        if (before >= 0) {
             View container = getContainer();
             if (null != container && container instanceof LinearLayout) {
-                View child = ((LinearLayout) container).getChildAt(select);
+                View child = ((LinearLayout) container).getChildAt(before);
                 if (null != child && child instanceof TabTextView) {
                     TabUtil.logE("select => clearFocus => TabTextView");
                     ((TabTextView) child).reset();
@@ -466,9 +499,9 @@ public class TabLayout extends HorizontalScrollView {
         }
 
         if (anim) {
-            animStart();
+            anim(false);
         }
-        setSelect(select, index, false, select == index);
+        scroll(before, next, notify, false, before == next);
     }
 
     @Keep
@@ -496,7 +529,7 @@ public class TabLayout extends HorizontalScrollView {
         if (index < 0) {
             index = 0;
         }
-        select(index, anim);
+        select(index, true, anim);
     }
 
     @Keep
@@ -530,7 +563,7 @@ public class TabLayout extends HorizontalScrollView {
         if (index >= count) {
             index = count - 1;
         }
-        select(index, anim);
+        select(index, true, anim);
     }
 
     @Keep
