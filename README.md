@@ -3,45 +3,55 @@
 ![image](https://github.com/153437803/module_tv_tablayout/blob/master/preview.gif )
 
 #
-#### 功能
+#### 更新
 ```
-/**
- * 更新数据
- *
- * @param list 数据源
- * @param <T>
- */
-@Keep
-public final <T extends TabModel> void update(@NonNull List<T> list)
-
-/**
- * 强制选中tab
- *
- * @param index 索引位置
- * @param anim  动画
- */
-@Keep
-public final void select(int index, boolean anim)
+******************
+2021-12-03
+1.添加.9图支持
 ```
 
 #
-#### data
+#### 支持
 ```
+1.支持.9图[必须是编译过后的.9, 否则会出现.9显示异常]
+2.支持网络图片、本地图片、 Assets内置图片
+3.支持动画, 默认关闭
+4.支持文字宽度自适应
+```
+
+#
+#### 功能
+```
+# 更新数据
+@Keep
+public final <T extends TabModel> void update(@NonNull List<T> list)
+
+# 强制选中
+@Keep
+public final void select(int index, boolean anim)
+
+# 获取选中位置
+@Keep
+public final int getSelect()
+
+# 指定位置是否选中
+@Keep
+public final boolean isSelect(@NonNull int index)
+
+# 右移
+@Keep
+public final void right(@IntRange(from = 0, to = Integer.MAX_VALUE) int num, boolean anim)
+
+# 左移
+@Keep
+public final void left(@IntRange(from = 0, to = Integer.MAX_VALUE) int num, boolean anim)
+```
+
+#
+#### 数据
+```
+@Keep
 public interface TabModel {
-
-    /**
-     * 文字剧中显示
-     *
-     * @return
-     */
-    int initTextGravity();
-
-    /**
-     * 文字大小
-     *
-     * @return
-     */
-    int initTextSize();
 
     /**
      * 文字内容
@@ -60,6 +70,15 @@ public interface TabModel {
     int[] initTextColors();
 
     /**
+     * 0: 默认文字背景颜色, 支持渐变背景色
+     * 1：焦点文字背景颜色, 支持渐变背景色
+     * 2：选中文字背景颜色, 支持渐变背景色
+     *
+     * @return
+     */
+    int[][] initTextBackgroundColors();
+
+    /**
      * 0: 默认文字背景网络图片 => 首先图片下载本地, 之后本地缓存拿
      * 1：焦点文字背景网络图片 => 首先图片下载本地, 之后本地缓存拿
      * 2：选中文字背景网络图片 => 首先图片下载本地, 之后本地缓存拿
@@ -69,13 +88,22 @@ public interface TabModel {
     String[] initTextBackgroundUrls();
 
     /**
-     * 0: 默认文字背景本地图片
-     * 1：焦点文字背景本地图片
-     * 2：选中文字背景本地图片
+     * 0: 默认图片背景Assets图片
+     * 1：焦点图片背景Assets图片
+     * 2：选中图片背景Assets图片
      *
      * @return
      */
-    int[] initTextBackgroundResources();
+    String[] initTextBackgroundAssets();
+
+    /**
+     * 0: 默认图片背景本地图片
+     * 1：焦点图片背景本地图片
+     * 2：选中图片背景本地图片
+     *
+     * @return
+     */
+    String[] initTextBackgroundFiles();
 
     /**
      * 0: 默认文字背景本地图片
@@ -84,7 +112,7 @@ public interface TabModel {
      *
      * @return
      */
-    int[] initTextBackgroundDefaults();
+    int[] initTextBackgroundResources();
 
     /****************************/
 
@@ -98,6 +126,15 @@ public interface TabModel {
     String[] initImageSrcUrls();
 
     /**
+     * 0: 默认图片背景颜色, 支持渐变背景色
+     * 1：焦点图片背景颜色, 支持渐变背景色
+     * 2：选中图片背景颜色, 支持渐变背景色
+     *
+     * @return
+     */
+    int[][] initImageBackgroundColors();
+
+    /**
      * 0: 默认图片背景网络图片 => 首先图片下载本地, 之后本地缓存拿
      * 1：焦点图片背景网络图片 => 首先图片下载本地, 之后本地缓存拿
      * 2：选中图片背景网络图片 => 首先图片下载本地, 之后本地缓存拿
@@ -105,6 +142,15 @@ public interface TabModel {
      * @return
      */
     String[] initImageBackgroundUrls();
+
+    /**
+     * 0: 默认图片背景Assets图片
+     * 1：焦点图片背景Assets图片
+     * 2：选中图片背景Assets图片
+     *
+     * @return
+     */
+    String[] initImageBackgroundAssets();
 
     /**
      * 0: 默认图片背景本地图片
@@ -116,15 +162,6 @@ public interface TabModel {
     int[] initImageBackgroundResources();
 
     /**
-     * 0: 默认图片背景本地图片
-     * 1：焦点图片背景本地图片
-     * 2：选中图片背景本地图片
-     *
-     * @return
-     */
-    int[] initImageBackgroundDefaults();
-
-    /**
      * 占位图
      *
      * @return
@@ -132,18 +169,4 @@ public interface TabModel {
     @DrawableRes
     int initImagePlaceholder();
 }
-```
-
-#
-#### 支持
-```
-1. 服务器下载的.9图必须是编译apk解压取出的.9图[编译过后没有黑线]
-```
-
-#
-#### 更新
-```
-******************
-2021-12-03
-1.添加.9图支持
 ```
