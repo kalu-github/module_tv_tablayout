@@ -73,19 +73,24 @@ class TabImageView extends ImageView {
     public void setImageDrawable(@Nullable Drawable drawable) {
 
         try {
-            int canvasWidth;
-            int canvasHeight;
             int imgWidth = drawable.getIntrinsicWidth();
             int imgHeight = drawable.getIntrinsicHeight();
+
+            int height = getHeight();
+            int width = imgWidth * height / imgHeight;
+
+            int canvasWidth;
+            int canvasHeight;
             if (mPadding > 0f) {
-                canvasWidth = (int) (imgWidth + mPadding * 2);
-                canvasHeight = (int) (imgHeight + mPadding * 2);
+                canvasWidth = (int) (width + mPadding * 2);
+                canvasHeight = (int) (height + mPadding * 2);
             } else {
-                canvasWidth = (int) (imgWidth * 1.1f);
-                canvasHeight = (int) (imgHeight * 1.1f);
+                canvasWidth = (int) (width * 1.1f);
+                canvasHeight = (int) (height * 1.1f);
             }
-            Bitmap temp1 = Bitmap.createBitmap(canvasWidth, canvasHeight, Bitmap.Config.ARGB_8888);
-            Canvas canvas = new Canvas(temp1);
+
+            Bitmap bitmap = Bitmap.createBitmap(canvasWidth, canvasHeight, Bitmap.Config.ARGB_8888);
+            Canvas canvas = new Canvas(bitmap);
             TabUtil.logE("setImageDrawable => imgWidth = " + imgWidth + ", imgHeight =" + imgHeight);
             TabUtil.logE("setImageDrawable => canvasWidth = " + canvasWidth + ", canvasHeight =" + canvasHeight);
             // 裁剪
@@ -96,11 +101,11 @@ class TabImageView extends ImageView {
             float top = canvasHeight / 5;
             float bottom = top * 4;
             RectF dst = new RectF(left, top, right, bottom);
-            Bitmap temp2 = ((BitmapDrawable) drawable).getBitmap();
-            canvas.drawBitmap(temp2, src, dst, null);
-            BitmapDrawable bitmapDrawable = new BitmapDrawable(getResources(), temp1);
-            if (null != temp2) {
-                temp2.recycle();
+            Bitmap temp = ((BitmapDrawable) drawable).getBitmap();
+            canvas.drawBitmap(temp, src, dst, null);
+            BitmapDrawable bitmapDrawable = new BitmapDrawable(getResources(), bitmap);
+            if (null != temp) {
+                temp.recycle();
             }
             super.setImageDrawable(bitmapDrawable);
         } catch (Exception e) {

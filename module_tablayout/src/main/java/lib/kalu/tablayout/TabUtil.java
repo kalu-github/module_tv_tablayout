@@ -42,7 +42,7 @@ import lib.kalu.tablayout.ninepatch.NinePatchChunk;
  */
 class TabUtil {
 
-    // 最多可能会同时先后下载3张图片
+    // 最多可能会先后下载3张图片
     private static final ExecutorService ES = Executors.newFixedThreadPool(3);
 
     public static final void logE(@NonNull String message) {
