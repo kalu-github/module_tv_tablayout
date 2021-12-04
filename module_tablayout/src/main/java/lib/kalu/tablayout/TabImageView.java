@@ -17,8 +17,6 @@ import androidx.annotation.Nullable;
 @SuppressLint("AppCompatCustomView")
 class TabImageView extends ImageView {
 
-    private float mMargin = 0f;
-    private float mPadding = 0f;
     private float mTabHeight = 0f;
 
     //    public TabImageView(@NonNull Context context) {
@@ -47,17 +45,6 @@ class TabImageView extends ImageView {
 
 //        LogUtils.e("AutoImageView", "onMeasure => width = " + width + ", height = " + height);
         setMeasuredDimension(width, height);
-
-        // margin
-        try {
-            if (mMargin == 0f) {
-                mMargin = getResources().getDimension(R.dimen.module_tablayout_d4);
-            }
-            LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) getLayoutParams();
-            params.rightMargin = (int) mMargin;
-            params.leftMargin = (int) mMargin;
-        } catch (Exception e) {
-        }
     }
 
     @Override
@@ -81,9 +68,11 @@ class TabImageView extends ImageView {
 
             int canvasWidth;
             int canvasHeight;
-            if (mPadding > 0f) {
-                canvasWidth = (int) (tabWidth + mPadding * 2);
-                canvasHeight = (int) (tabHeight + mPadding * 2);
+            int paddingLeft = getPaddingLeft();
+            int paddingRight = getPaddingRight();
+            if (paddingLeft > 0f && paddingRight>0f) {
+                canvasWidth = (int) (tabWidth + paddingLeft+paddingRight);
+                canvasHeight = (int) (tabHeight + paddingLeft+paddingRight);
             } else {
                 canvasWidth = (int) (tabWidth * 1.1f);
                 canvasHeight = (int) (tabWidth * 1.1f);
@@ -119,14 +108,6 @@ class TabImageView extends ImageView {
         setFocusable(true);
         setFocusableInTouchMode(true);
         setScaleType(ScaleType.CENTER);
-    }
-
-    protected final void setMargin(float margin) {
-        this.mMargin = margin;
-    }
-
-    protected final void setPadding(float padding) {
-        this.mPadding = padding;
     }
 
     protected final void setHeight(float height) {

@@ -434,14 +434,16 @@ public class TabLayout extends HorizontalScrollView {
                 TabUtil.updateTextUI(this, t, mBackgroundColorsRadius, focus, stay);
             }
         };
-        view.setPadding(mPadding);
-        view.setMargin(mMargin);
         view.setTextSize(mTextSize);
         view.setUnderline(mTextUnderline);
         view.setUnderlineColor(mTextUnderlineColor);
         view.setUnderlineWidth(mTextUnderlineWidth);
         view.setUnderlineHeight(mTextUnderlineHeight);
-        view.setLayoutParams(new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.MATCH_PARENT));
+        view.setPadding((int) mPadding, 0, (int) mPadding, 0);
+        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.MATCH_PARENT);
+        layoutParams.leftMargin = (int) mMargin;
+        layoutParams.rightMargin = (int) mMargin;
+        view.setLayoutParams(layoutParams);
 
         // ui
         TabUtil.updateTextUI(view, t, mBackgroundColorsRadius, false, false);
@@ -462,10 +464,12 @@ public class TabLayout extends HorizontalScrollView {
                 TabUtil.updateImageUI(this, t, mBackgroundColorsRadius, focus, stay);
             }
         };
-        view.setMargin(mMargin);
-        view.setPadding(mPadding);
         view.setHeight(mImageHeight);
-        view.setLayoutParams(new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.MATCH_PARENT));
+        view.setPadding((int) mPadding, 0, (int) mPadding, 0);
+        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.MATCH_PARENT);
+        layoutParams.leftMargin = (int) mMargin;
+        layoutParams.rightMargin = (int) mMargin;
+        view.setLayoutParams(layoutParams);
 
         // ui
         TabUtil.updateImageUI(view, t, mBackgroundColorsRadius, false, false);

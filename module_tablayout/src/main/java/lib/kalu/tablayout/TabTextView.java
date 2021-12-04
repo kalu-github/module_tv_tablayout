@@ -19,13 +19,10 @@ import androidx.annotation.RequiresApi;
 @SuppressLint("AppCompatCustomView")
 class TabTextView extends TextView {
 
-    private float mPadding = 0f;
-    private float mMargin = 0f;
     private boolean mUnderline = false;
     private int mUnderlineColor = Color.TRANSPARENT;
     private float mUnderlineHeight = 0;
     private float mUnderlineWidth = 0;
-    private float mSize = 10f;
 
 //    public TabTextView(@NonNull Context context) {
 //        super(context);
@@ -85,23 +82,19 @@ class TabTextView extends TextView {
         int height = MeasureSpec.getSize(heightMeasureSpec);
         CharSequence text = getText();
 
+        int left = getPaddingLeft();
+        int right = getPaddingRight();
         int measureText = (int) getPaint().measureText(String.valueOf(text));
-        if (mPadding == 0) {
-            mPadding = measureText / text.length();
-        }
-        int width = (int) (measureText + mPadding * 1.5);
-        setMeasuredDimension(width, height);
+        int width = measureText;
 
-        // margin
-        try {
-            if (mMargin == 0f) {
-                mMargin = getResources().getDimension(R.dimen.module_tablayout_d4);
-            }
-            LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) getLayoutParams();
-            params.rightMargin = (int) mMargin;
-            params.leftMargin = (int) mMargin;
-        } catch (Exception e) {
+        if (left == 0 || right == 0) {
+            int size = measureText / text.length();
+            width += size * 1.5;
+        } else {
+            width += left;
+            width += right;
         }
+        setMeasuredDimension(width, height);
     }
 
     private final void init() {
@@ -111,26 +104,7 @@ class TabTextView extends TextView {
         setFocusableInTouchMode(true);
         setMaxLines(1);
         setLines(1);
-        try {
-            setGravity(Gravity.CENTER);
-            setTextSize(mSize);
-        } catch (Exception e) {
-        }
-//        setSingleLine(true);
-//        setMaxEms(10);
-//        setMinEms(2);
-    }
-
-    protected final void setSize(float size) {
-        this.mSize = size;
-    }
-
-    protected final void setPadding(float padding) {
-        this.mPadding = padding;
-    }
-
-    protected final void setMargin(float margin) {
-        this.mMargin = margin;
+        setGravity(Gravity.CENTER);
     }
 
     protected final void setUnderline(boolean underline) {
