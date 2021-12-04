@@ -11,6 +11,37 @@
 ```
 
 #
+#### 示例
+```
+# step1 => 加工数据
+ArrayList<TabModel> list = new ArrayList<>();
+for (int i = 0; i < 20; i++) {
+  TabModel temp = new TabModel()
+  list.add(temp);
+}
+
+# step2 => 刷新组件
+lib.kalu.tablayout.TabLayout tabLayout = findViewById(R.id.tab_plus);
+tabLayout.update(list);
+
+# step2 => 添加监听
+lib.kalu.tablayout.TabLayout tabLayout = findViewById(R.id.tab_plus);
+tabLayout.setOnTabChangeListener(new OnTabChangeListener() {
+    @Override
+    public void onSelect(int index) {
+    }
+
+    @Override
+    public void onRepeat(int index) {
+    }
+
+    @Override
+    public void onLeave(int index) {
+    }
+});
+```
+
+#
 #### 支持
 ```
 1.支持文字颜色默认、 选中、 驻留三种状态
