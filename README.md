@@ -13,18 +13,18 @@
 #
 #### 示例
 ```
-# step1 => 加工数据
+# 1.加工数据
 ArrayList<TabModel> list = new ArrayList<>();
 for (int i = 0; i < 20; i++) {
   TabModel temp = new TabModel()
   list.add(temp);
 }
 
-# step2 => 刷新组件
+# 2.刷新组件
 lib.kalu.tablayout.TabLayout tabLayout = findViewById(R.id.tab_plus);
 tabLayout.update(list);
 
-# step2 => 添加监听
+# 3.添加监听
 lib.kalu.tablayout.TabLayout tabLayout = findViewById(R.id.tab_plus);
 tabLayout.setOnTabChangeListener(new OnTabChangeListener() {
     @Override
