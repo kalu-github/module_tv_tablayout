@@ -45,6 +45,8 @@ public class TabLayout extends HorizontalScrollView {
     private float mTextUnderlineHeight = 0;
     private float mTextSize = 10f;
 
+    private float mImageHeight = 0f;
+
     public TabLayout(Context context) {
         super(context);
         init(null);
@@ -161,6 +163,7 @@ public class TabLayout extends HorizontalScrollView {
             mTextUnderlineWidth = attributes.getDimension(R.styleable.TabLayout_tl_text_underline_width, 0f);
             mTextUnderlineHeight = attributes.getDimension(R.styleable.TabLayout_tl_text_underline_height, 0f);
             mTextSize = attributes.getDimension(R.styleable.TabLayout_tl_text_size, 10f);
+            mImageHeight = attributes.getDimension(R.styleable.TabLayout_tl_image_height, 0f);
         } catch (Exception e) {
         }
 
@@ -324,6 +327,7 @@ public class TabLayout extends HorizontalScrollView {
         TabImageView view = new TabImageView(getContext());
         view.setMargin(mMargin);
         view.setPadding(mPadding);
+        view.setHeight(mImageHeight);
         view.setLayoutParams(new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.MATCH_PARENT));
 
         // ui

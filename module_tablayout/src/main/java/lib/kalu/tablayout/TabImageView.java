@@ -3,24 +3,14 @@ package lib.kalu.tablayout;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Matrix;
-import android.graphics.Paint;
-import android.graphics.PixelFormat;
 import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
-import android.os.Build;
-import android.util.AttributeSet;
-import android.util.Log;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
-import androidx.annotation.ColorInt;
-import androidx.annotation.IntRange;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
@@ -29,6 +19,7 @@ class TabImageView extends ImageView {
 
     private float mMargin = 0f;
     private float mPadding = 0f;
+    private float mTabHeight = 0f;
 
     //    public TabImageView(@NonNull Context context) {
 //        super(context);
@@ -76,22 +67,32 @@ class TabImageView extends ImageView {
             int imgWidth = drawable.getIntrinsicWidth();
             int imgHeight = drawable.getIntrinsicHeight();
 
-            int height = getHeight();
-            int width = imgWidth * height / imgHeight;
+            int tabHeight = 0;
+            if (mTabHeight > 0f) {
+                tabHeight = (int) mTabHeight;
+            }
+            if (tabHeight == 0) {
+                tabHeight = getHeight();
+            }
+            if (tabHeight == 0) {
+                tabHeight = imgHeight;
+            }
+            int tabWidth = imgWidth * tabHeight / imgHeight;
 
             int canvasWidth;
             int canvasHeight;
             if (mPadding > 0f) {
-                canvasWidth = (int) (width + mPadding * 2);
-                canvasHeight = (int) (height + mPadding * 2);
+                canvasWidth = (int) (tabWidth + mPadding * 2);
+                canvasHeight = (int) (tabHeight + mPadding * 2);
             } else {
-                canvasWidth = (int) (width * 1.1f);
-                canvasHeight = (int) (height * 1.1f);
+                canvasWidth = (int) (tabWidth * 1.1f);
+                canvasHeight = (int) (tabWidth * 1.1f);
             }
 
             Bitmap bitmap = Bitmap.createBitmap(canvasWidth, canvasHeight, Bitmap.Config.ARGB_8888);
             Canvas canvas = new Canvas(bitmap);
             TabUtil.logE("setImageDrawable => imgWidth = " + imgWidth + ", imgHeight =" + imgHeight);
+            TabUtil.logE("setImageDrawable => tabWidth = " + tabWidth + ", tabHeight =" + tabHeight);
             TabUtil.logE("setImageDrawable => canvasWidth = " + canvasWidth + ", canvasHeight =" + canvasHeight);
             // 裁剪
             Rect src = new Rect(0, 0, imgWidth, imgHeight);
@@ -127,6 +128,10 @@ class TabImageView extends ImageView {
 
     protected final void setPadding(float padding) {
         this.mPadding = padding;
+    }
+
+    protected final void setHeight(float height) {
+        this.mTabHeight = height;
     }
 
     /*************************/
