@@ -17,7 +17,7 @@ import androidx.annotation.Nullable;
 @SuppressLint("AppCompatCustomView")
 class TabImageView extends ImageView {
 
-    private float mTabHeight = 0f;
+    private float mHeight = 0f;
 
     //    public TabImageView(@NonNull Context context) {
 //        super(context);
@@ -55,8 +55,8 @@ class TabImageView extends ImageView {
             int imgHeight = drawable.getIntrinsicHeight();
 
             int tabHeight = 0;
-            if (mTabHeight > 0f) {
-                tabHeight = (int) mTabHeight;
+            if (mHeight > 0f) {
+                tabHeight = (int) mHeight;
             }
             if (tabHeight == 0) {
                 tabHeight = getHeight();
@@ -111,7 +111,7 @@ class TabImageView extends ImageView {
     }
 
     protected final void setHeight(float height) {
-        this.mTabHeight = height;
+        this.mHeight = height;
     }
 
     /*************************/
