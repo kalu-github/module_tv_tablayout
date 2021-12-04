@@ -32,6 +32,10 @@ tabLayout.setOnTabChangeListener(new OnTabChangeListener() {
     }
 
     @Override
+    public void onBefore(int index) {
+    }
+
+    @Override
     public void onRepeat(int index) {
     }
 
@@ -96,6 +100,13 @@ public interface OnTabChangeListener {
      * @param index 索引位置
      */
     void onSelect(@IntRange(from = 0, to = Integer.MAX_VALUE) int index);
+
+    /**
+     * 之前选中
+     *
+     * @param index 索引位置
+     */
+    void onBefore(@IntRange(from = 0, to = Integer.MAX_VALUE) int index);
 
     /**
      * 复位

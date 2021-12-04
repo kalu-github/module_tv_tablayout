@@ -14,6 +14,13 @@ public interface OnTabChangeListener {
     void onSelect(@IntRange(from = 0, to = Integer.MAX_VALUE) int index);
 
     /**
+     * 之前选中
+     *
+     * @param index 索引位置
+     */
+    void onBefore(@IntRange(from = 0, to = Integer.MAX_VALUE) int index);
+
+    /**
      * 复位
      *
      * @param index 索引位置

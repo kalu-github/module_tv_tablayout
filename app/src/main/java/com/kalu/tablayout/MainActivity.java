@@ -115,6 +115,11 @@ public class MainActivity extends AppCompatActivity {
             }
 
             @Override
+            public void onBefore(int index) {
+                Log.e("MAINAA", "onBefore => index = " + index);
+            }
+
+            @Override
             public void onRepeat(int index) {
                 Log.e("MAINAA", "onRepeat => index = " + index);
             }
