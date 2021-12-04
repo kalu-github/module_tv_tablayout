@@ -7,17 +7,23 @@ import androidx.annotation.Keep;
 public interface OnTabChangeListener {
 
     /**
-     * @param index
+     * 选中
+     *
+     * @param index 索引位置
      */
     void onSelect(@IntRange(from = 0, to = Integer.MAX_VALUE) int index);
 
     /**
-     * @param index
+     * 复位
+     *
+     * @param index 索引位置
      */
     void onRepeat(@IntRange(from = 0, to = Integer.MAX_VALUE) int index);
 
     /**
-     * @param index
+     * 离开
+     *
+     * @param index 索引位置
      */
     void onLeave(@IntRange(from = 0, to = Integer.MAX_VALUE) int index);
 }

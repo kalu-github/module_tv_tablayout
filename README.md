@@ -49,6 +49,37 @@ public final void right(@IntRange(from = 0, to = Integer.MAX_VALUE) int num, boo
 # 左移
 @Keep
 public final void left(@IntRange(from = 0, to = Integer.MAX_VALUE) int num, boolean anim)
+
+# 监听
+public final void setOnTabChangeListener(@NonNull OnTabChangeListener listener)
+```
+
+#### 监听器
+```
+@Keep
+public interface OnTabChangeListener {
+
+    /**
+     * 选中
+     *
+     * @param index 索引位置
+     */
+    void onSelect(@IntRange(from = 0, to = Integer.MAX_VALUE) int index);
+
+    /**
+     * 复位
+     *
+     * @param index 索引位置
+     */
+    void onRepeat(@IntRange(from = 0, to = Integer.MAX_VALUE) int index);
+
+    /**
+     * 离开
+     *
+     * @param index 索引位置
+     */
+    void onLeave(@IntRange(from = 0, to = Integer.MAX_VALUE) int index);
+}
 ```
 
 #
