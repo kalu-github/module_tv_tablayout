@@ -43,7 +43,7 @@ class TabTextView extends TextView {
         super.onDraw(canvas);
 
         // 驻留文字下划线
-        if (mUnderline && mUnderlineHeight > 0f && !hasFocus() && isActivated()) {
+        if (mUnderline && mUnderlineHeight > 0f && String.valueOf(1).equals(getHint())) {
             try {
                 TextPaint textPaint = getPaint();
                 Paint.FontMetrics fontMetrics = textPaint.getFontMetrics();
@@ -105,7 +105,6 @@ class TabTextView extends TextView {
     }
 
     private final void init() {
-        setActivated(false);
         setClickable(true);
         setLongClickable(false);
         setFocusable(true);
@@ -152,18 +151,11 @@ class TabTextView extends TextView {
 
     /*************************/
 
-    private OnFocusChangeListener mOnFocusChangeListener;
-
-    @Override
-    public void setOnFocusChangeListener(OnFocusChangeListener l) {
-        this.mOnFocusChangeListener = l;
-        super.setOnFocusChangeListener(l);
+    protected final void updateTextColor(int color, boolean stay) {
+        setHint(stay ? String.valueOf(1) : null);
+        super.setTextColor(color);
     }
 
-    protected final void reset() {
-        setActivated(false);
-        if (null != mOnFocusChangeListener) {
-            mOnFocusChangeListener.onFocusChange(this, false);
-        }
+    protected void refresh(boolean focus, boolean stay) {
     }
 }

@@ -62,6 +62,9 @@
         android:layout_marginLeft="10dp"
         android:layout_weight="1"
         android:background="#88000000"
+        android:clickable="true"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
         android:gravity="center"
         android:orientation="vertical">
 

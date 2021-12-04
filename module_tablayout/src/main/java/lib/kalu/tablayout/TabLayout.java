@@ -14,7 +14,6 @@ import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.IntRange;
 import androidx.annotation.Keep;
@@ -82,8 +81,11 @@ public class TabLayout extends HorizontalScrollView {
      */
     @Override
     public void scrollTo(int x, int y) {
-        TabUtil.logE("scrollTo => x = " + x);
-        super.scrollTo(x, y);
+        boolean enabled = isEnabled();
+        if (enabled) {
+            TabUtil.logE("scrollTo => x = " + x);
+            super.scrollTo(x, y);
+        }
     }
 
     /**
@@ -94,8 +96,11 @@ public class TabLayout extends HorizontalScrollView {
      */
     @Override
     public void scrollBy(int x, int y) {
-        TabUtil.logE("scrollBy => x = " + x);
-        super.scrollBy(x, y);
+        boolean enabled = isEnabled();
+        if (enabled) {
+            TabUtil.logE("scrollBy => x = " + x);
+            super.scrollBy(x, y);
+        }
     }
 
     @Override
@@ -162,6 +167,45 @@ public class TabLayout extends HorizontalScrollView {
 
     /************************************/
 
+    private final void init(@Nullable AttributeSet attrs) {
+        setDescendantFocusability(FOCUS_AFTER_DESCENDANTS);
+        setSmoothScrollingEnabled(true);
+        setNestedScrollingEnabled(true);
+        setHorizontalScrollBarEnabled(false);
+        setWillNotDraw(true);
+        setLongClickable(false);
+        setClickable(false);
+        setFocusable(true);
+        setFocusableInTouchMode(true);
+        LinearLayout view = new LinearLayout(getContext());
+        view.setClickable(true);
+        view.setLongClickable(false);
+        view.setFocusable(true);
+        view.setFocusableInTouchMode(true);
+        view.setOrientation(LinearLayout.HORIZONTAL);
+        view.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
+        addView(view, 0);
+        TypedArray attributes = null;
+        try {
+            attributes = getContext().obtainStyledAttributes(attrs, R.styleable.TabLayout);
+            mScale = attributes.getFloat(R.styleable.TabLayout_tl_scale, 1f);
+            mMargin = attributes.getDimension(R.styleable.TabLayout_tl_margin, 0f);
+            mPadding = attributes.getDimension(R.styleable.TabLayout_tl_padding, 0f);
+            mBackgroundColorsRadius = attributes.getDimension(R.styleable.TabLayout_tl_background_colors_radius, 0f);
+            mTextUnderline = attributes.getBoolean(R.styleable.TabLayout_tl_text_underline, false);
+            mTextUnderlineColor = attributes.getColor(R.styleable.TabLayout_tl_text_underline_color, Color.TRANSPARENT);
+            mTextUnderlineWidth = attributes.getDimension(R.styleable.TabLayout_tl_text_underline_width, 0f);
+            mTextUnderlineHeight = attributes.getDimension(R.styleable.TabLayout_tl_text_underline_height, 0f);
+            mTextSize = attributes.getDimension(R.styleable.TabLayout_tl_text_size, 10f);
+            mImageHeight = attributes.getDimension(R.styleable.TabLayout_tl_image_height, 0f);
+        } catch (Exception e) {
+        }
+
+        if (null != attributes) {
+            attributes.recycle();
+        }
+    }
+
     private final boolean isOutside(boolean left) {
 
         View container = getContainer();
@@ -184,54 +228,10 @@ public class TabLayout extends HorizontalScrollView {
         }
     }
 
-    private final void init(@Nullable AttributeSet attrs) {
-
-        TypedArray attributes = null;
-        try {
-            attributes = getContext().obtainStyledAttributes(attrs, R.styleable.TabLayout);
-            mScale = attributes.getFloat(R.styleable.TabLayout_tl_scale, 1f);
-            mMargin = attributes.getDimension(R.styleable.TabLayout_tl_margin, 0f);
-            mPadding = attributes.getDimension(R.styleable.TabLayout_tl_padding, 0f);
-            mBackgroundColorsRadius = attributes.getDimension(R.styleable.TabLayout_tl_background_colors_radius, 0f);
-            mTextUnderline = attributes.getBoolean(R.styleable.TabLayout_tl_text_underline, false);
-            mTextUnderlineColor = attributes.getColor(R.styleable.TabLayout_tl_text_underline_color, Color.TRANSPARENT);
-            mTextUnderlineWidth = attributes.getDimension(R.styleable.TabLayout_tl_text_underline_width, 0f);
-            mTextUnderlineHeight = attributes.getDimension(R.styleable.TabLayout_tl_text_underline_height, 0f);
-            mTextSize = attributes.getDimension(R.styleable.TabLayout_tl_text_size, 10f);
-            mImageHeight = attributes.getDimension(R.styleable.TabLayout_tl_image_height, 0f);
-        } catch (Exception e) {
-        }
-
-        if (null != attributes) {
-            attributes.recycle();
-        }
-
-        updateFocusability(true);
-        setSmoothScrollingEnabled(false);
-        setHorizontalScrollBarEnabled(false);
-        setWillNotDraw(true);
-        setLongClickable(false);
-        setClickable(false);
-        setFocusable(true);
-        setFocusableInTouchMode(true);
-        LinearLayout view = new LinearLayout(getContext());
-        view.setClickable(true);
-        view.setLongClickable(false);
-        view.setFocusable(true);
-        view.setFocusableInTouchMode(true);
-        view.setOrientation(LinearLayout.HORIZONTAL);
-        view.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
-        addView(view, 0);
-    }
-
     private final void anim(boolean over) {
         if (mScale <= 1f)
             return;
         ViewCompat.animate(this).scaleX(over ? 1f : mScale).scaleY(over ? 1f : mScale).start();
-    }
-
-    private final void updateFocusability(boolean force) {
-        setDescendantFocusability(force ? FOCUS_BLOCK_DESCENDANTS : FOCUS_AFTER_DESCENDANTS);
     }
 
     /**
@@ -299,6 +299,34 @@ public class TabLayout extends HorizontalScrollView {
         }
     }
 
+//    private final void setEnabled(@IntRange(from = 0, to = Integer.MAX_VALUE) int before, @IntRange(from = 0, to = Integer.MAX_VALUE) int next, boolean enabled) {
+//        super.setEnabled(enabled);
+//        TabUtil.logE("setEnabled => enabled = " + enabled + ", before = " + before + ", next = " + next);
+//
+//        if (null != view && next != before) {
+//            int left = view.getLeft();
+//            scrollTo(left, (int) getY());
+//        }
+//
+//        //        if (enabled) {
+////            View container = getContainer();
+////            if (null == container || !(container instanceof LinearLayout))
+////                return;
+////            int count = ((LinearLayout) container).getChildCount();
+////            if (count == 0)
+////                return;
+////            int index = getIndex();
+////            if (index < 0) {
+////                index = 0;
+////            }
+//////            ((LinearLayout) container).getChildAt(index).requestFocus();
+////            View focus = ((LinearLayout) container).getChildAt(index);
+////            int left = focus.getLeft();
+////            scrollTo(left, (int) getY());
+//////            requestChildFocus(focus, focus);
+////        }
+//    }
+
     /**
      * 更新焦点状态
      *
@@ -309,6 +337,8 @@ public class TabLayout extends HorizontalScrollView {
      * @param repeat 重复
      */
     private final void updateFocus(@IntRange(from = 0, to = Integer.MAX_VALUE) int before, @IntRange(from = 0, to = Integer.MAX_VALUE) int next, boolean notify, boolean leave, boolean repeat) {
+        TabUtil.logE("updateFocus => before = " + before + ", next = " + next + ", notify = " + notify + ", leave = " + leave + ", repeat = " + repeat);
+        setEnabled(leave ? false : true);
         View container = getContainer();
         int count = ((LinearLayout) container).getChildCount();
         int num = 0;
@@ -323,19 +353,28 @@ public class TabLayout extends HorizontalScrollView {
                 View view = ((LinearLayout) container).getChildAt(i);
                 if (null == view)
                     continue;
-                updateFocusability(false);
-                view.setActivated(i == next && leave);
                 // 强制获焦
                 if (i == next) {
                     TabUtil.logE("updateFocus[强制获焦] => index = " + next + ", view = " + view);
                     ++num;
-                    view.requestFocus();
-                    if (notify && null != mOnTabChangeListener) {
+
+                    // 焦点
+                    if (isEnabled()) {
+                        view.requestFocus();
+                    }
+
+                    if (view instanceof TabTextView) {
+                        ((TabTextView) view).refresh(true, leave);
+                    } else if (view instanceof TabImageView) {
+                        ((TabImageView) view).refresh(true, leave);
+                    }
+
+                    if (null != mOnTabChangeListener) {
                         if (repeat) {
                             mOnTabChangeListener.onRepeat(i);
                         } else if (leave) {
                             mOnTabChangeListener.onLeave(i);
-                        } else {
+                        } else if (notify) {
                             mOnTabChangeListener.onSelect(i);
                         }
                     }
@@ -344,7 +383,11 @@ public class TabLayout extends HorizontalScrollView {
                 else if (i == before) {
                     TabUtil.logE("updateFocus[强制失焦] => index = " + before + ", view = " + view);
                     ++num;
-                    view.clearFocus();
+                    if (view instanceof TabTextView) {
+                        ((TabTextView) view).refresh(false, false);
+                    } else if (view instanceof TabImageView) {
+                        ((TabImageView) view).refresh(false, false);
+                    }
                 }
             }
         }
@@ -361,16 +404,6 @@ public class TabLayout extends HorizontalScrollView {
 
         int count = ((LinearLayout) container).getChildCount();
         ((LinearLayout) container).addView(view, count);
-
-        // focus
-        view.setOnFocusChangeListener(new OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean b) {
-                TabUtil.logE("onFocusChange => focus = " + b + ", view = " + v);
-                updateFocusability(true);
-                TabUtil.updateTextUI(view, t, mBackgroundColorsRadius);
-            }
-        });
     }
 
     private final <T extends TabModel> void addContainerImage(@NonNull final ImageView view, @NonNull final T t) {
@@ -380,16 +413,6 @@ public class TabLayout extends HorizontalScrollView {
 
         int count = ((LinearLayout) container).getChildCount();
         ((LinearLayout) container).addView(view, count);
-
-        // focus
-        view.setOnFocusChangeListener(new OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean b) {
-                TabUtil.logE("onFocusChange => focus = " + b + ", view = " + v);
-                updateFocusability(true);
-                TabUtil.updateImageUI(view, t, mBackgroundColorsRadius);
-            }
-        });
     }
 
     private final <T extends TabModel> void addText(@NonNull T t) {
@@ -402,7 +425,12 @@ public class TabLayout extends HorizontalScrollView {
         if (null == container)
             return;
 
-        TabTextView view = new TabTextView(getContext());
+        TabTextView view = new TabTextView(getContext()) {
+            @Override
+            protected void refresh(boolean focus, boolean stay) {
+                TabUtil.updateTextUI(this, t, mBackgroundColorsRadius, focus, stay);
+            }
+        };
         view.setPadding(mPadding);
         view.setMargin(mMargin);
         view.setTextSize(mTextSize);
@@ -413,7 +441,7 @@ public class TabLayout extends HorizontalScrollView {
         view.setLayoutParams(new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.MATCH_PARENT));
 
         // ui
-        TabUtil.updateTextUI(view, t, mBackgroundColorsRadius);
+        TabUtil.updateTextUI(view, t, mBackgroundColorsRadius, false, false);
 
         // addView
         addContainerText(view, t);
@@ -424,14 +452,20 @@ public class TabLayout extends HorizontalScrollView {
         if (null == t)
             return;
 
-        TabImageView view = new TabImageView(getContext());
+        TabImageView view = new TabImageView(getContext()) {
+            @Override
+            protected void refresh(boolean focus, boolean stay) {
+                super.refresh(focus, stay);
+                TabUtil.updateImageUI(this, t, mBackgroundColorsRadius, focus, stay);
+            }
+        };
         view.setMargin(mMargin);
         view.setPadding(mPadding);
         view.setHeight(mImageHeight);
         view.setLayoutParams(new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.MATCH_PARENT));
 
         // ui
-        TabUtil.updateImageUI(view, t, mBackgroundColorsRadius);
+        TabUtil.updateImageUI(view, t, mBackgroundColorsRadius, false, false);
 
         // addView
         addContainerImage(view, t);
@@ -482,21 +516,8 @@ public class TabLayout extends HorizontalScrollView {
 
         int before = getIndex();
         TabUtil.logE("select => before = " + before + ", next = " + next);
-
-        // 复位
-        if (before >= 0) {
-            View container = getContainer();
-            if (null != container && container instanceof LinearLayout) {
-                View child = ((LinearLayout) container).getChildAt(before);
-                if (null != child && child instanceof TabTextView) {
-                    TabUtil.logE("select => clearFocus => TabTextView");
-                    ((TabTextView) child).reset();
-                } else if (null != child && child instanceof TabImageView) {
-                    TabUtil.logE("select => clearFocus => TabImageView");
-                    ((TabImageView) child).reset();
-                }
-            }
-        }
+        if (before == next)
+            return;
 
         if (anim) {
             anim(false);
@@ -555,7 +576,6 @@ public class TabLayout extends HorizontalScrollView {
 
         int count = ((LinearLayout) container).getChildCount();
         int select = getIndex();
-        Toast.makeText(getContext(), count + " = " + count + ", select = " + select, Toast.LENGTH_SHORT).show();
         if (select + 1 >= count)
             return;
 

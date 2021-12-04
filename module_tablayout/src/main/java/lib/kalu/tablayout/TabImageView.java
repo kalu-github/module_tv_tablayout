@@ -114,7 +114,6 @@ class TabImageView extends ImageView {
     }
 
     private final void init() {
-        setActivated(false);
         setClickable(true);
         setLongClickable(false);
         setFocusable(true);
@@ -136,18 +135,6 @@ class TabImageView extends ImageView {
 
     /*************************/
 
-    private OnFocusChangeListener mOnFocusChangeListener;
-
-    @Override
-    public void setOnFocusChangeListener(OnFocusChangeListener l) {
-        this.mOnFocusChangeListener = l;
-        super.setOnFocusChangeListener(l);
-    }
-
-    public final void reset() {
-        setActivated(false);
-        if (null != mOnFocusChangeListener) {
-            mOnFocusChangeListener.onFocusChange(this, false);
-        }
+    protected void refresh(boolean focus, boolean stay){
     }
 }

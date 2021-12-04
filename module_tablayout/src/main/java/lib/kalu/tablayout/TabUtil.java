@@ -56,16 +56,16 @@ class TabUtil {
         Log.e("module-tablayout", message);
     }
 
-    public static final <T extends TabModel> void updateImageUI(@NonNull ImageView view, @NonNull T t, @NonNull float radius) {
+    public static final <T extends TabModel> void updateImageUI(@NonNull ImageView view, @NonNull T t, @NonNull float radius, boolean focus, boolean stay) {
 
         if (null == t || null == view)
             return;
 
-        updateImageSrc(view, t);
-        updateImageBackground(view, t, radius);
+        updateImageSrc(view, t, focus, stay);
+        updateImageBackground(view, t, radius, focus, stay);
     }
 
-    private static final <T extends TabModel> void updateImageSrc(@NonNull ImageView view, @NonNull T t) {
+    private static final <T extends TabModel> void updateImageSrc(@NonNull ImageView view, @NonNull T t, boolean focus, boolean stay) {
 
         if (null == t || null == view)
             return;
@@ -74,20 +74,14 @@ class TabUtil {
         if (null == urls || urls.length < 3)
             return;
 
-        boolean focus = view.hasFocus();
-        boolean activated = view.isActivated();
-
-        String url = activated ? urls[2] : (focus ? urls[1] : urls[0]);
+        String url = stay ? urls[2] : (focus ? urls[1] : urls[0]);
         loadImageUrl(view, url, false);
     }
 
-    private static final <T extends TabModel> void updateImageBackground(@NonNull ImageView view, @NonNull T t, @NonNull float radius) {
+    private static final <T extends TabModel> void updateImageBackground(@NonNull ImageView view, @NonNull T t, @NonNull float radius, boolean focus, boolean stay) {
 
         if (null == t || null == view)
             return;
-
-        boolean focus = view.hasFocus();
-        boolean activated = view.isActivated();
 
         logE("updateImageBackground => ************************");
         String[] urls = t.initImageBackgroundUrls();
@@ -101,49 +95,57 @@ class TabUtil {
 
         // 背景 => 渐变背景色
         if (null != colors && colors.length >= 3) {
-            int[] color = activated ? colors[2] : (focus ? colors[1] : colors[0]);
+            int[] color = stay ? colors[2] : (focus ? colors[1] : colors[0]);
             logE("updateImageBackground[colors]=> color = " + Arrays.toString(color));
             setBackgroundGradient(view, color, radius);
         }
         // 背景 => 网络图片
         else if (null != urls && urls.length >= 3) {
-            String url = activated ? urls[2] : (focus ? urls[1] : urls[0]);
+            String url = stay ? urls[2] : (focus ? urls[1] : urls[0]);
             logE("updateImageBackground[urls]=> url = " + url);
             loadImageUrl(view, url, true);
         }
         // 背景 => Assets图片
         else if (null != assets && assets.length >= 3) {
-            String asset = activated ? assets[2] : (focus ? assets[1] : assets[0]);
+            String asset = stay ? assets[2] : (focus ? assets[1] : assets[0]);
             logE("updateImageBackground[assets]=> asset = " + asset);
             setBackgroundAssets(view, asset, true);
         }
         // 背景 => 资源图片
         else if (null != resources && resources.length >= 3) {
-            int resId = activated ? resources[2] : (focus ? resources[1] : resources[0]);
+            int resId = stay ? resources[2] : (focus ? resources[1] : resources[0]);
             logE("updateImageBackground[resources]=> resId = " + resId);
             setBackgroundResource(view, resId, true);
         }
         // 背景 => 默认图片
         else {
-            int resId = activated ? R.drawable.module_tablayout_ic_shape_background_select : (focus ? R.drawable.module_tablayout_ic_shape_background_focus : R.drawable.module_tablayout_ic_shape_background_normal);
+            int resId = stay ? R.drawable.module_tablayout_ic_shape_background_select : (focus ? R.drawable.module_tablayout_ic_shape_background_focus : R.drawable.module_tablayout_ic_shape_background_normal);
             logE("updateImageBackground[defaults]=> resId = " + resId);
             setBackgroundResource(view, resId, true);
         }
         logE("updateImageBackground => ************************");
     }
 
-    public static final <T extends TabModel> void updateTextUI(@NonNull TextView view, @NonNull T t, @NonNull float radius) {
+    /**
+     * @param view
+     * @param t
+     * @param radius
+     * @param focus  焦点
+     * @param stay   驻留
+     * @param <T>
+     */
+    public static final <T extends TabModel> void updateTextUI(@NonNull TabTextView view, @NonNull T t, @NonNull float radius, boolean focus, boolean stay) {
 
         if (null == t || null == view)
             return;
 
         view.setText(t.initText());
 
-        updateTextColor(view, t);
-        updateTextBackground(view, t, radius);
+        updateTextColor(view, t, focus, stay);
+        updateTextBackground(view, t, radius, focus, stay);
     }
 
-    private static final <T extends TabModel> void updateTextColor(@NonNull TextView view, @NonNull T t) {
+    private static final <T extends TabModel> void updateTextColor(@NonNull TabTextView view, @NonNull T t, boolean focus, boolean stay) {
 
         if (null == t || null == view)
             return;
@@ -152,20 +154,16 @@ class TabUtil {
         if (null == colors || colors.length < 3)
             return;
 
-        boolean focus = view.hasFocus();
-        boolean activated = view.isActivated();
-        view.setTextColor(activated ? colors[2] : (focus ? colors[1] : colors[0]));
+        view.updateTextColor(stay ? colors[2] : (focus ? colors[1] : colors[0]), stay);
     }
 
-    private static final <T extends TabModel> void updateTextBackground(@NonNull TextView view, @NonNull T t, @NonNull float radius) {
+    private static final <T extends TabModel> void updateTextBackground(@NonNull TextView view, @NonNull T t, @NonNull float radius, boolean focus, boolean stay) {
 
         if (null == t)
             return;
 
-        boolean focus = view.hasFocus();
-        boolean activated = view.isActivated();
         logE("updateTextBackground => ************************");
-        logE("updateTextBackground => focus = " + focus + ", activated = " + activated);
+        logE("updateTextBackground => focus = " + focus + ", stay = " + stay);
 
         int[][] colors = t.initTextBackgroundColors();
         logE("updateTextBackground => colors = " + Arrays.toString(colors));
@@ -180,37 +178,37 @@ class TabUtil {
 
         // 背景 => 渐变背景色
         if (null != colors && colors.length >= 3) {
-            int[] color = activated ? colors[2] : (focus ? colors[1] : colors[0]);
+            int[] color = stay ? colors[2] : (focus ? colors[1] : colors[0]);
             logE("updateTextBackground[colors]=> color = " + Arrays.toString(color) + ", text = " + view.getText());
             setBackgroundGradient(view, color, radius);
         }
         // 背景 => 网络图片
         else if (null != urls && urls.length >= 3) {
-            String url = activated ? urls[2] : (focus ? urls[1] : urls[0]);
+            String url = stay ? urls[2] : (focus ? urls[1] : urls[0]);
             logE("updateTextBackground[urls]=> url = " + url + ", text = " + view.getText());
             loadImageUrl(view, url, true);
         }
         // 背景 => 本地图片
         else if (null != files && files.length >= 3) {
-            String file = activated ? files[2] : (focus ? files[1] : files[0]);
+            String file = stay ? files[2] : (focus ? files[1] : files[0]);
             logE("updateTextBackground[files]=> file = " + file + ", text = " + view.getText());
             setBackgroundFile(view, file, true);
         }
         // 背景 => Assets图片
         else if (null != assets && assets.length >= 3) {
-            String path = activated ? assets[2] : (focus ? assets[1] : assets[0]);
+            String path = stay ? assets[2] : (focus ? assets[1] : assets[0]);
             logE("updateTextBackground[assets]=> assets = " + path + ", text = " + view.getText());
             setBackgroundAssets(view, path, true);
         }
         // 背景 => 资源图片
         else if (null != resources && resources.length >= 3) {
-            int resId = activated ? resources[2] : (focus ? resources[1] : resources[0]);
+            int resId = stay ? resources[2] : (focus ? resources[1] : resources[0]);
             logE("updateTextBackground[resources]=> resource = " + resId + ", text = " + view.getText());
             setBackgroundResource(view, resId, true);
         }
         // 背景 => 默认图片
         else {
-            int resId = activated ? R.drawable.module_tablayout_ic_shape_background_select : (focus ? R.drawable.module_tablayout_ic_shape_background_focus : R.drawable.module_tablayout_ic_shape_background_normal);
+            int resId = stay ? R.drawable.module_tablayout_ic_shape_background_select : (focus ? R.drawable.module_tablayout_ic_shape_background_focus : R.drawable.module_tablayout_ic_shape_background_normal);
             logE("updateTextBackground[defaults]=> resId = " + resId + ", text = " + view.getText());
             setBackgroundResource(view, resId, true);
         }
