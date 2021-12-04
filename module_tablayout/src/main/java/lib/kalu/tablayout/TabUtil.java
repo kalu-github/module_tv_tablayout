@@ -307,18 +307,8 @@ class TabUtil {
 
     private final static void setBackgroundAssets(@NonNull final View view, @NonNull final String path, final boolean isBackground) {
         try {
-            if (Looper.myLooper() != Looper.getMainLooper()) {
-                view.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        Drawable drawable = decodeDrawable(view, path, true);
-                        setBackgroundDrawable(view, drawable, isBackground);
-                    }
-                });
-            } else {
-                Drawable drawable = decodeDrawable(view, path, true);
-                setBackgroundDrawable(view, drawable, isBackground);
-            }
+            Drawable drawable = decodeDrawable(view, path, true);
+            setBackgroundDrawable(view, drawable, isBackground);
         } catch (Exception e) {
         }
     }
