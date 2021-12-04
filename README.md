@@ -1,9 +1,9 @@
 #
-#### preview
+#### 预览
 ![image](https://github.com/153437803/module_tv_tablayout/blob/master/preview.gif )
 
 #
-#### api
+#### 功能
 ```
 /**
  * 更新数据
@@ -135,13 +135,13 @@ public interface TabModel {
 ```
 
 #
-#### readme
+#### 支持
 ```
 1. 服务器下载的.9图必须是编译apk解压取出的.9图[编译过后没有黑线]
 ```
 
 #
-#### update
+#### 更新
 ```
 ******************
 2021-12-03
