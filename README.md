@@ -247,3 +247,9 @@ public interface TabModel {
     int initImagePlaceholder();
 }
 ```
+
+#
+#### 开源项目
+```
+https://github.com/Anatolii/NinePatchChunk
+```
