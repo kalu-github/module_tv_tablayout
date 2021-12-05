@@ -234,6 +234,20 @@ public class TabLayout extends HorizontalScrollView {
         ViewCompat.animate(this).scaleX(over ? 1f : mScale).scaleY(over ? 1f : mScale).start();
     }
 
+    private final void scroll(int direction, boolean leave, boolean repeat) {
+        int before = getIndex();
+        int next;
+        if (direction == View.FOCUS_LEFT) {
+            next = before - 1;
+        } else if (direction == View.FOCUS_RIGHT) {
+            next = before + 1;
+        } else {
+            next = before < 0 ? 0 : before;
+        }
+        TabUtil.logE("updateSelect => before = " + before + ", next = " + next);
+        scroll(before, next, true, leave, repeat && before >= 0);
+    }
+
     /**
      * 强制选中
      *
@@ -253,20 +267,6 @@ public class TabLayout extends HorizontalScrollView {
 
         updateIndex(next);
         updateFocus(before, next, notify, leave, repeat);
-    }
-
-    private final void scroll(int direction, boolean leave, boolean repeat) {
-        int before = getIndex();
-        int next;
-        if (direction == View.FOCUS_LEFT) {
-            next = before - 1;
-        } else if (direction == View.FOCUS_RIGHT) {
-            next = before + 1;
-        } else {
-            next = before < 0 ? 0 : before;
-        }
-        TabUtil.logE("updateSelect => before = " + before + ", next = " + next);
-        scroll(before, next, true, leave, repeat && before >= 0);
     }
 
     /**
