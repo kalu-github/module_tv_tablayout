@@ -101,7 +101,7 @@ class TabUtil {
         // 背景 => 本地图片
         else if (null != files && files.length >= 3 && null != files[0] && null != files[1] && null != files[2]) {
             String file = stay ? files[2] : (focus ? files[1] : files[0]);
-            logE("updateTextBackground[files]=> file = " + file);
+            logE("updateImageBackground[files]=> file = " + file);
             setBackgroundFile(view, file, true);
         }
         // 背景 => Assets图片
