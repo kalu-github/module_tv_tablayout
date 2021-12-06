@@ -8,3 +8,4 @@ dependencyResolutionManagement {
 }
 include ':app'
 include ':module_tablayout'
+include ':module_tablayout_v7'

@@ -9,15 +9,14 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.Toast;
-
 import java.util.ArrayList;
 import java.util.Random;
 
-import lib.kalu.tablayout.listener.OnTabChangeListener;
-import lib.kalu.tablayout.model.TabModel;
-import lib.kalu.tablayout.model.TabModelImage;
-import lib.kalu.tablayout.model.TabModelText;
+import lib.kalu.tab.TabLayout;
+import lib.kalu.tab.listener.OnTabChangeListener;
+import lib.kalu.tab.model.TabModel;
+import lib.kalu.tab.model.TabModelImage;
+import lib.kalu.tab.model.TabModelText;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -102,7 +101,7 @@ public class MainActivity extends AppCompatActivity {
             list.add(temp);
         }
 
-        lib.kalu.tablayout.TabLayout tabLayout = findViewById(R.id.tab_plus);
+        TabLayout tabLayout = findViewById(R.id.tab_plus);
         tabLayout.update(list);
         tabLayout.setOnTabChangeListener(new OnTabChangeListener() {
             @Override
@@ -133,7 +132,7 @@ public class MainActivity extends AppCompatActivity {
         findViewById(R.id.four).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                lib.kalu.tablayout.TabLayout tabLayout = findViewById(R.id.tab_plus);
+                TabLayout tabLayout = findViewById(R.id.tab_plus);
                 tabLayout.select(3, true, true);
             }
         });
@@ -141,7 +140,7 @@ public class MainActivity extends AppCompatActivity {
         findViewById(R.id.five).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                lib.kalu.tablayout.TabLayout tabLayout = findViewById(R.id.tab_plus);
+                TabLayout tabLayout = findViewById(R.id.tab_plus);
                 tabLayout.select(4, false, true);
             }
         });
@@ -149,7 +148,7 @@ public class MainActivity extends AppCompatActivity {
         findViewById(R.id.left1).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                lib.kalu.tablayout.TabLayout tabLayout = findViewById(R.id.tab_plus);
+                TabLayout tabLayout = findViewById(R.id.tab_plus);
                 tabLayout.left();
             }
         });
@@ -157,7 +156,7 @@ public class MainActivity extends AppCompatActivity {
         findViewById(R.id.left2).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                lib.kalu.tablayout.TabLayout tabLayout = findViewById(R.id.tab_plus);
+                TabLayout tabLayout = findViewById(R.id.tab_plus);
                 tabLayout.left(2);
             }
         });
@@ -165,7 +164,7 @@ public class MainActivity extends AppCompatActivity {
         findViewById(R.id.right1).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                lib.kalu.tablayout.TabLayout tabLayout = findViewById(R.id.tab_plus);
+                TabLayout tabLayout = findViewById(R.id.tab_plus);
                 tabLayout.right();
             }
         });
@@ -173,7 +172,7 @@ public class MainActivity extends AppCompatActivity {
         findViewById(R.id.right2).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                lib.kalu.tablayout.TabLayout tabLayout = findViewById(R.id.tab_plus);
+                TabLayout tabLayout = findViewById(R.id.tab_plus);
                 tabLayout.right(2);
             }
         });

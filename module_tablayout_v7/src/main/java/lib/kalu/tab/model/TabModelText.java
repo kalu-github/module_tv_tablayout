@@ -1,8 +1,7 @@
 package lib.kalu.tab.model;
 
 import android.graphics.Color;
-
-import androidx.annotation.Keep;
+import android.support.annotation.Keep;
 
 import lib.kalu.tab.R;
 

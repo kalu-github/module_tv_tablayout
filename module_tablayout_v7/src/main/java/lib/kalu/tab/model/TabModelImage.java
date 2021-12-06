@@ -1,6 +1,6 @@
 package lib.kalu.tab.model;
 
-import androidx.annotation.Keep;
+import android.support.annotation.Keep;
 
 import lib.kalu.tab.R;
 

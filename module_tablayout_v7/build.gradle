@@ -1,0 +1,41 @@
+plugins {
+    id 'com.android.library'
+}
+
+android {
+    compileSdk 31
+    defaultConfig {
+        minSdk 17
+        targetSdk 27
+//        minSdk 19
+//        targetSdk 31
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled true
+            proguardFiles '../proguard/proguard-rules.pro'
+        }
+        debug {
+            minifyEnabled true
+            proguardFiles '../proguard/proguard-rules.pro'
+        }
+    }
+
+    libraryVariants.all { variant ->
+        variant.outputs.all {
+            def type = new String(buildType.name).toLowerCase()
+            def time = new Date().format("yyyyMMdd", TimeZone.getTimeZone("GMT+08"))
+            outputFileName = "lib_tablayout_v7_" + type + "_" + time + ".aar"
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+}
+
+dependencies {
+    implementation 'com.android.support:appcompat-v7:27.1.1'
+}
