@@ -1,4 +1,4 @@
-package lib.kalu.tablayout;
+package lib.kalu.tab;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -24,8 +24,9 @@ import androidx.core.view.ViewCompat;
 
 import java.util.List;
 
-import lib.kalu.tablayout.listener.OnTabChangeListener;
-import lib.kalu.tablayout.model.TabModel;
+import lib.kalu.tablayout.R;
+import lib.kalu.tab.listener.OnTabChangeListener;
+import lib.kalu.tab.model.TabModel;
 
 /**
  * TabLayout for TV
@@ -168,6 +169,7 @@ public class TabLayout extends HorizontalScrollView {
     /************************************/
 
     private final void init(@Nullable AttributeSet attrs) {
+        setPadding(0, 0, 0, 0);
         setDescendantFocusability(FOCUS_AFTER_DESCENDANTS);
         setSmoothScrollingEnabled(true);
         setNestedScrollingEnabled(true);
@@ -177,14 +179,15 @@ public class TabLayout extends HorizontalScrollView {
         setClickable(false);
         setFocusable(true);
         setFocusableInTouchMode(true);
-        LinearLayout view = new LinearLayout(getContext());
-        view.setClickable(true);
-        view.setLongClickable(false);
-        view.setFocusable(true);
-        view.setFocusableInTouchMode(true);
-        view.setOrientation(LinearLayout.HORIZONTAL);
-        view.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
-        addView(view, 0);
+        LinearLayout root = new LinearLayout(getContext());
+        root.setPadding(0, 0, 0, 0);
+        root.setClickable(true);
+        root.setLongClickable(false);
+        root.setFocusable(true);
+        root.setFocusableInTouchMode(true);
+        root.setOrientation(LinearLayout.HORIZONTAL);
+        root.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
+        addView(root, 0);
         TypedArray attributes = null;
         try {
             attributes = getContext().obtainStyledAttributes(attrs, R.styleable.TabLayout);
@@ -418,7 +421,7 @@ public class TabLayout extends HorizontalScrollView {
         ((LinearLayout) container).addView(view, count);
     }
 
-    private final <T extends TabModel> void addText(@NonNull T t) {
+    private final <T extends TabModel> void addText(@NonNull T t, int index, int count) {
 
         String text = t.initText();
         if (null == text || text.length() == 0)
@@ -441,8 +444,9 @@ public class TabLayout extends HorizontalScrollView {
         view.setUnderlineHeight(mTextUnderlineHeight);
         view.setPadding((int) mPadding, 0, (int) mPadding, 0);
         LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.MATCH_PARENT);
-        layoutParams.leftMargin = (int) mMargin;
-        layoutParams.rightMargin = (int) mMargin;
+        if (index + 1 != count) {
+            layoutParams.rightMargin = (int) mMargin;
+        }
         view.setLayoutParams(layoutParams);
 
         // ui
@@ -452,7 +456,7 @@ public class TabLayout extends HorizontalScrollView {
         addContainerText(view, t);
     }
 
-    private final <T extends TabModel> void addImage(@NonNull T t) {
+    private final <T extends TabModel> void addImage(@NonNull T t, int index, int count) {
 
         if (null == t)
             return;
@@ -467,8 +471,9 @@ public class TabLayout extends HorizontalScrollView {
         view.setHeight(mImageHeight);
         view.setPadding((int) mPadding, 0, (int) mPadding, 0);
         LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.MATCH_PARENT);
-        layoutParams.leftMargin = (int) mMargin;
-        layoutParams.rightMargin = (int) mMargin;
+        if (index + 1 != count) {
+            layoutParams.rightMargin = (int) mMargin;
+        }
         view.setLayoutParams(layoutParams);
 
         // ui
@@ -494,14 +499,15 @@ public class TabLayout extends HorizontalScrollView {
             ((LinearLayout) container).removeAllViews();
         }
 
-        for (int i = 0; i < list.size(); i++) {
+        int size = list.size();
+        for (int i = 0; i < size; i++) {
             T t = list.get(i);
             if (null == t)
                 continue;
             if (null != t.initImageSrcUrls() && t.initImageSrcUrls().length >= 3) {
-                addImage(t);
+                addImage(t, i, size);
             } else if (null != t.initTextColors() && t.initTextColors().length >= 3) {
-                addText(t);
+                addText(t, i, size);
             }
         }
     }
@@ -602,6 +608,16 @@ public class TabLayout extends HorizontalScrollView {
     @Keep
     public final int getSelect() {
         return getIndex();
+    }
+
+    @Keep
+    public final int getCount() {
+        try {
+            View container = getContainer();
+            return ((LinearLayout) container).getChildCount();
+        } catch (Exception e) {
+            return 0;
+        }
     }
 
     /************************************/

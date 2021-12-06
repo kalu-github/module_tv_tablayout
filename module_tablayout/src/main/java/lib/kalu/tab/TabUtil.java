@@ -1,25 +1,19 @@
-package lib.kalu.tablayout;
+package lib.kalu.tab;
 
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.ColorFilter;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
-import android.graphics.drawable.NinePatchDrawable;
 import android.os.Looper;
 import android.util.Log;
 import android.view.View;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import androidx.annotation.DrawableRes;
 import androidx.annotation.NonNull;
-import androidx.appcompat.widget.DrawableUtils;
-import androidx.core.graphics.drawable.DrawableCompat;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -32,10 +26,10 @@ import java.util.Arrays;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import lib.kalu.tablayout.model.TabModel;
-import lib.kalu.tablayout.model.TabModelImage;
-import lib.kalu.tablayout.model.TabModelText;
-import lib.kalu.tablayout.ninepatch.NinePatchChunk;
+import lib.kalu.tab.ninepatch.NinePatchChunk;
+import lib.kalu.tablayout.BuildConfig;
+import lib.kalu.tablayout.R;
+import lib.kalu.tab.model.TabModel;
 
 /**
  * utils

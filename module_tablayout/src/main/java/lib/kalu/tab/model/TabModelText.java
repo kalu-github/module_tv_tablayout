@@ -1,7 +1,6 @@
-package lib.kalu.tablayout.model;
+package lib.kalu.tab.model;
 
 import android.graphics.Color;
-import android.view.Gravity;
 
 import androidx.annotation.Keep;
 

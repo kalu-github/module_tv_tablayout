@@ -1,4 +1,4 @@
-package lib.kalu.tablayout.model;
+package lib.kalu.tab.model;
 
 import androidx.annotation.DrawableRes;
 import androidx.annotation.Keep;

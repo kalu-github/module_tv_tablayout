@@ -1,4 +1,4 @@
-package lib.kalu.tablayout.ninepatch;
+package lib.kalu.tab.ninepatch;
 
 import android.content.res.Resources;
 import android.graphics.Bitmap;

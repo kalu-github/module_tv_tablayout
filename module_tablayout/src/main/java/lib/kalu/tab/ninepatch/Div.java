@@ -1,4 +1,4 @@
-package lib.kalu.tablayout.ninepatch;
+package lib.kalu.tab.ninepatch;
 
 import java.io.Externalizable;
 import java.io.IOException;

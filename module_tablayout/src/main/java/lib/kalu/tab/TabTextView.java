@@ -1,4 +1,4 @@
-package lib.kalu.tablayout;
+package lib.kalu.tab;
 
 import android.annotation.SuppressLint;
 import android.content.Context;

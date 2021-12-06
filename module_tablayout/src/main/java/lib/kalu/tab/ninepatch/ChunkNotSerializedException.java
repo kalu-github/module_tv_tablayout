@@ -1,4 +1,4 @@
-package lib.kalu.tablayout.ninepatch;
+package lib.kalu.tab.ninepatch;
 
 /**
  * Created by Anatolii on 8/28/13.

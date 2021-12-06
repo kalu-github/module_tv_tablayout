@@ -1,4 +1,4 @@
-package lib.kalu.tablayout.listener;
+package lib.kalu.tab.listener;
 
 import androidx.annotation.IntRange;
 import androidx.annotation.Keep;
