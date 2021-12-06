@@ -21,11 +21,11 @@ for (int i = 0; i < 20; i++) {
 }
 
 # 2.刷新组件
-lib.kalu.tablayout.TabLayout tabLayout = findViewById(R.id.tab_plus);
+TabLayout tabLayout = findViewById(R.id.tab_plus);
 tabLayout.update(list);
 
 # 3.添加监听
-lib.kalu.tablayout.TabLayout tabLayout = findViewById(R.id.tab_plus);
+TabLayout tabLayout = findViewById(R.id.tab_plus);
 tabLayout.setOnTabChangeListener(new OnTabChangeListener() {
     @Override
     public void onSelect(int index) {
