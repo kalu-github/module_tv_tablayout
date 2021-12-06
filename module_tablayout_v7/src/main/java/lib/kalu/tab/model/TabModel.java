@@ -97,6 +97,15 @@ public interface TabModel {
     String[] initImageBackgroundUrls();
 
     /**
+     * 0: 默认图片背景本地图片
+     * 1：焦点图片背景本地图片
+     * 2：选中图片背景本地图片
+     *
+     * @return
+     */
+    String[] initImageBackgroundFiles();
+
+    /**
      * 0: 默认图片背景Assets图片
      * 1：焦点图片背景Assets图片
      * 2：选中图片背景Assets图片

@@ -29,6 +29,11 @@ public abstract class TabModelText implements TabModel {
     }
 
     @Override
+    public String[] initImageBackgroundFiles() {
+        return null;
+    }
+
+    @Override
     public String[] initImageBackgroundAssets() {
         return null;
     }
