@@ -107,6 +107,12 @@ class TabTextView extends TextView {
         setGravity(Gravity.CENTER);
     }
 
+
+    @Override
+    public void setTextSize(int unit, float size) {
+        super.setTextSize(unit, size);
+    }
+
     protected final void setUnderline(boolean underline) {
         this.mUnderline = underline;
     }

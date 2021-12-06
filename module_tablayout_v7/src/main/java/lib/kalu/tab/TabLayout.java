@@ -12,6 +12,7 @@ import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
 import android.support.v4.view.ViewCompat;
 import android.util.AttributeSet;
+import android.util.TypedValue;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
@@ -306,7 +307,7 @@ public class TabLayout extends HorizontalScrollView {
 //
 //        if (null != view && next != before) {
 //            int left = view.getLeft();
-//            scrollTo(left, (int) getY());
+//            scrollTo(left,  getY());
 //        }
 //
 //        //        if (enabled) {
@@ -323,7 +324,7 @@ public class TabLayout extends HorizontalScrollView {
 //////            ((LinearLayout) container).getChildAt(index).requestFocus();
 ////            View focus = ((LinearLayout) container).getChildAt(index);
 ////            int left = focus.getLeft();
-////            scrollTo(left, (int) getY());
+////            scrollTo(left,  getY());
 //////            requestChildFocus(focus, focus);
 ////        }
 //    }
@@ -435,15 +436,15 @@ public class TabLayout extends HorizontalScrollView {
                 TabUtil.updateTextUI(this, t, mBackgroundColorsRadius, focus, stay);
             }
         };
-        view.setTextSize(mTextSize);
+        view.setTextSize(TypedValue.COMPLEX_UNIT_PX, mTextSize);
         view.setUnderline(mTextUnderline);
         view.setUnderlineColor(mTextUnderlineColor);
         view.setUnderlineWidth(mTextUnderlineWidth);
         view.setUnderlineHeight(mTextUnderlineHeight);
-        view.setPadding((int) mPadding, 0, (int) mPadding, 0);
+        view.setPadding(mPadding, 0, mPadding, 0);
         LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.MATCH_PARENT);
         if (index + 1 != count) {
-            layoutParams.rightMargin = (int) mMargin;
+            layoutParams.rightMargin = mMargin;
         }
         view.setLayoutParams(layoutParams);
 
@@ -467,10 +468,10 @@ public class TabLayout extends HorizontalScrollView {
             }
         };
         view.setHeight(mImageHeight);
-        view.setPadding((int) mPadding, 0, (int) mPadding, 0);
+        view.setPadding(mPadding, 0, mPadding, 0);
         LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.MATCH_PARENT);
         if (index + 1 != count) {
-            layoutParams.rightMargin = (int) mMargin;
+            layoutParams.rightMargin = mMargin;
         }
         view.setLayoutParams(layoutParams);
 
