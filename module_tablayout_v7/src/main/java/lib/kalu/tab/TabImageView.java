@@ -15,7 +15,7 @@ import android.widget.ImageView;
 @SuppressLint("AppCompatCustomView")
 class TabImageView extends ImageView {
 
-    private float mHeight = 0f;
+    private int mHeight = 0;
 
     //    public TabImageView(@NonNull Context context) {
 //        super(context);
@@ -68,9 +68,9 @@ class TabImageView extends ImageView {
             int canvasHeight;
             int paddingLeft = getPaddingLeft();
             int paddingRight = getPaddingRight();
-            if (paddingLeft > 0f && paddingRight>0f) {
-                canvasWidth = (int) (tabWidth + paddingLeft+paddingRight);
-                canvasHeight = (int) (tabHeight + paddingLeft+paddingRight);
+            if (paddingLeft > 0f && paddingRight > 0f) {
+                canvasWidth = (int) (tabWidth + paddingLeft + paddingRight);
+                canvasHeight = (int) (tabHeight + paddingLeft + paddingRight);
             } else {
                 canvasWidth = (int) (tabWidth * 1.1f);
                 canvasHeight = (int) (tabWidth * 1.1f);
@@ -84,10 +84,10 @@ class TabImageView extends ImageView {
             // 裁剪
             Rect src = new Rect(0, 0, imgWidth, imgHeight);
             // 坐标
-            float left = canvasWidth / 5;
-            float right = left * 4;
-            float top = canvasHeight / 5;
-            float bottom = top * 4;
+            int left = canvasWidth / 5;
+            int right = left * 4;
+            int top = canvasHeight / 5;
+            int bottom = top * 4;
             RectF dst = new RectF(left, top, right, bottom);
             Bitmap temp = ((BitmapDrawable) drawable).getBitmap();
             canvas.drawBitmap(temp, src, dst, null);
@@ -108,12 +108,12 @@ class TabImageView extends ImageView {
         setScaleType(ScaleType.CENTER);
     }
 
-    protected final void setHeight(float height) {
+    protected final void setHeight(int height) {
         this.mHeight = height;
     }
 
     /*************************/
 
-    protected void refresh(boolean focus, boolean stay){
+    protected void refresh(boolean focus, boolean stay) {
     }
 }

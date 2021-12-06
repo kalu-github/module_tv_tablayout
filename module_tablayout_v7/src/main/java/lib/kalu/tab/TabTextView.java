@@ -10,7 +10,6 @@ import android.support.annotation.NonNull;
 import android.text.TextPaint;
 import android.util.AttributeSet;
 import android.view.Gravity;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 @SuppressLint("AppCompatCustomView")
@@ -18,8 +17,8 @@ class TabTextView extends TextView {
 
     private boolean mUnderline = false;
     private int mUnderlineColor = Color.TRANSPARENT;
-    private float mUnderlineHeight = 0;
-    private float mUnderlineWidth = 0;
+    private int mUnderlineHeight = 0;
+    private int mUnderlineWidth = 0;
 
 //    public TabTextView(@NonNull Context context) {
 //        super(context);
@@ -41,23 +40,26 @@ class TabTextView extends TextView {
             try {
                 TextPaint textPaint = getPaint();
                 Paint.FontMetrics fontMetrics = textPaint.getFontMetrics();
-                float measureTextHeight = fontMetrics.bottom - fontMetrics.top;
+                int measureTextHeight = (int) (fontMetrics.bottom - fontMetrics.top);
                 int paintColor = textPaint.getColor();
-                float strokeWidth = textPaint.getStrokeWidth();
-                float width = getWidth();
-                float height = getHeight();
-                float startX;
-                float stopX;
+                int strokeWidth = (int) textPaint.getStrokeWidth();
+                int width = getWidth();
+                int height = getHeight();
+                int startX;
+                int stopX;
                 if (mUnderlineWidth <= 0) {
-                    float measureTextWidth = textPaint.measureText(String.valueOf(getText()));
+                    int measureTextWidth = (int) textPaint.measureText(String.valueOf(getText()));
                     startX = width / 2 - measureTextWidth / 2;
                     stopX = startX + measureTextWidth;
                 } else {
                     startX = width / 2 - mUnderlineWidth / 2;
                     stopX = startX + mUnderlineWidth;
                 }
-                float startY = height / 2 + measureTextHeight / 2 + mUnderlineHeight;
-                float stopY = startY;
+                int startY = height / 2 + measureTextHeight / 2 + mUnderlineHeight / 2;
+                if (startY >= height) {
+                    startY = height - mUnderlineHeight / 2;
+                }
+                int stopY = startY;
                 textPaint.setStrokeJoin(Paint.Join.ROUND);
                 textPaint.setStrokeCap(Paint.Cap.ROUND);
                 textPaint.setAntiAlias(true);
@@ -101,6 +103,7 @@ class TabTextView extends TextView {
         setFocusableInTouchMode(true);
         setMaxLines(1);
         setLines(1);
+        setMinEms(2);
         setGravity(Gravity.CENTER);
     }
 
@@ -112,11 +115,11 @@ class TabTextView extends TextView {
         this.mUnderlineColor = color;
     }
 
-    protected final void setUnderlineWidth(float width) {
+    protected final void setUnderlineWidth(int width) {
         this.mUnderlineWidth = width;
     }
 
-    protected final void setUnderlineHeight(float height) {
+    protected final void setUnderlineHeight(int height) {
         this.mUnderlineHeight = height;
     }
 

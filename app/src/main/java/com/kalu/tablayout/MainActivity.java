@@ -1,12 +1,12 @@
 package com.kalu.tablayout;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
-
+import android.annotation.SuppressLint;
+import android.app.Fragment;
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import java.util.ArrayList;
@@ -104,11 +104,12 @@ public class MainActivity extends AppCompatActivity {
         TabLayout tabLayout = findViewById(R.id.tab_plus);
         tabLayout.update(list);
         tabLayout.setOnTabChangeListener(new OnTabChangeListener() {
+            @SuppressLint("CommitTransaction")
             @Override
             public void onSelect(int index) {
                 Log.e("MAINAA", "onSelect => index = " + index);
-                FragmentManager supportFragmentManager = getSupportFragmentManager();
-                FragmentTransaction fragmentTransaction = supportFragmentManager.beginTransaction();
+                FragmentManager fragmentManager = getFragmentManager();
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                 fragmentTransaction.replace(R.id.content, list0.get(index));
                 fragmentTransaction.commit();
             }

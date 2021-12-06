@@ -33,17 +33,17 @@ import lib.kalu.tab.model.TabModel;
 public class TabLayout extends HorizontalScrollView {
 
     private float mScale = 1f;
-    private float mMargin = 0f;
-    private float mPadding = 0f;
-    private float mBackgroundColorsRadius = 0f;
+    private int mMargin = 0;
+    private int mPadding = 0;
+    private int mBackgroundColorsRadius = 0;
 
     private boolean mTextUnderline = false;
     private int mTextUnderlineColor = Color.TRANSPARENT;
-    private float mTextUnderlineWidth = 0;
-    private float mTextUnderlineHeight = 0;
-    private float mTextSize = 10f;
+    private int mTextUnderlineWidth = 0;
+    private int mTextUnderlineHeight = 0;
+    private int mTextSize = 10;
 
-    private float mImageHeight = 0f;
+    private int mImageHeight = 0;
 
     public TabLayout(Context context) {
         super(context);
@@ -189,16 +189,16 @@ public class TabLayout extends HorizontalScrollView {
         TypedArray attributes = null;
         try {
             attributes = getContext().obtainStyledAttributes(attrs, R.styleable.TabLayout);
-            mScale = attributes.getFloat(R.styleable.TabLayout_tl_scale, 1f);
-            mMargin = attributes.getDimension(R.styleable.TabLayout_tl_margin, 0f);
-            mPadding = attributes.getDimension(R.styleable.TabLayout_tl_padding, 0f);
-            mBackgroundColorsRadius = attributes.getDimension(R.styleable.TabLayout_tl_background_colors_radius, 0f);
+            mScale = attributes.getFloat(R.styleable.TabLayout_tl_scale, 1);
+            mMargin = attributes.getDimensionPixelOffset(R.styleable.TabLayout_tl_margin, 0);
+            mPadding = attributes.getDimensionPixelOffset(R.styleable.TabLayout_tl_padding, 0);
+            mBackgroundColorsRadius = attributes.getDimensionPixelOffset(R.styleable.TabLayout_tl_background_colors_radius, 0);
             mTextUnderline = attributes.getBoolean(R.styleable.TabLayout_tl_text_underline, false);
             mTextUnderlineColor = attributes.getColor(R.styleable.TabLayout_tl_text_underline_color, Color.TRANSPARENT);
-            mTextUnderlineWidth = attributes.getDimension(R.styleable.TabLayout_tl_text_underline_width, 0f);
-            mTextUnderlineHeight = attributes.getDimension(R.styleable.TabLayout_tl_text_underline_height, 0f);
-            mTextSize = attributes.getDimension(R.styleable.TabLayout_tl_text_size, 10f);
-            mImageHeight = attributes.getDimension(R.styleable.TabLayout_tl_image_height, 0f);
+            mTextUnderlineWidth = attributes.getDimensionPixelOffset(R.styleable.TabLayout_tl_text_underline_width, 0);
+            mTextUnderlineHeight = attributes.getDimensionPixelOffset(R.styleable.TabLayout_tl_text_underline_height, 0);
+            mTextSize = attributes.getDimensionPixelOffset(R.styleable.TabLayout_tl_text_size, 10);
+            mImageHeight = attributes.getDimensionPixelOffset(R.styleable.TabLayout_tl_image_height, 0);
         } catch (Exception e) {
         }
 
