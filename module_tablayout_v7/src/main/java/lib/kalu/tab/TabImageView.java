@@ -72,8 +72,8 @@ class TabImageView extends ImageView {
                 canvasWidth = (int) (tabWidth + paddingLeft + paddingRight);
                 canvasHeight = (int) (tabHeight + paddingLeft + paddingRight);
             } else {
-                canvasWidth = (int) (tabWidth * 1.1f);
-                canvasHeight = (int) (tabWidth * 1.1f);
+                canvasWidth = (int) (tabWidth * 1.05f);
+                canvasHeight = (int) (tabHeight * 1.05f);
             }
 
             Bitmap bitmap = Bitmap.createBitmap(canvasWidth, canvasHeight, Bitmap.Config.ARGB_8888);
