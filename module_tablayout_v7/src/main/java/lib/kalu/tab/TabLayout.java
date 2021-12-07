@@ -34,7 +34,6 @@ public class TabLayout extends HorizontalScrollView {
 
     private float mScale = 1f;
     private int mMargin = 0;
-    private int mPadding = 0;
     private int mBackgroundColorsRadius = 0;
 
     private boolean mTextUnderline = false;
@@ -42,8 +41,10 @@ public class TabLayout extends HorizontalScrollView {
     private int mTextUnderlineWidth = 0;
     private int mTextUnderlineHeight = 0;
     private int mTextSize = 10;
+    private int mTextPadding = 0;
 
     private int mImageHeight = 0;
+    private int mImagePadding = 0;
 
     public TabLayout(Context context) {
         super(context);
@@ -193,14 +194,15 @@ public class TabLayout extends HorizontalScrollView {
             attributes = getContext().obtainStyledAttributes(attrs, R.styleable.TabLayout);
             mScale = attributes.getFloat(R.styleable.TabLayout_tl_scale, 1);
             mMargin = attributes.getDimensionPixelOffset(R.styleable.TabLayout_tl_margin, 0);
-            mPadding = attributes.getDimensionPixelOffset(R.styleable.TabLayout_tl_padding, 0);
             mBackgroundColorsRadius = attributes.getDimensionPixelOffset(R.styleable.TabLayout_tl_background_colors_radius, 0);
+            mTextPadding = attributes.getDimensionPixelOffset(R.styleable.TabLayout_tl_text_padding, 0);
             mTextUnderline = attributes.getBoolean(R.styleable.TabLayout_tl_text_underline, false);
             mTextUnderlineColor = attributes.getColor(R.styleable.TabLayout_tl_text_underline_color, Color.TRANSPARENT);
             mTextUnderlineWidth = attributes.getDimensionPixelOffset(R.styleable.TabLayout_tl_text_underline_width, 0);
             mTextUnderlineHeight = attributes.getDimensionPixelOffset(R.styleable.TabLayout_tl_text_underline_height, 0);
             mTextSize = attributes.getDimensionPixelOffset(R.styleable.TabLayout_tl_text_size, 10);
             mImageHeight = attributes.getDimensionPixelOffset(R.styleable.TabLayout_tl_image_height, 0);
+            mImagePadding = attributes.getDimensionPixelOffset(R.styleable.TabLayout_tl_image_padding, 0);
         } catch (Exception e) {
         }
 
@@ -442,7 +444,7 @@ public class TabLayout extends HorizontalScrollView {
         view.setUnderlineColor(mTextUnderlineColor);
         view.setUnderlineWidth(mTextUnderlineWidth);
         view.setUnderlineHeight(mTextUnderlineHeight);
-        view.setPadding(mPadding, 0, mPadding, 0);
+        view.setPadding(mTextPadding, 0, mTextPadding, 0);
         LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.MATCH_PARENT);
         if (index + 1 != count) {
             layoutParams.rightMargin = mMargin;
@@ -469,7 +471,7 @@ public class TabLayout extends HorizontalScrollView {
             }
         };
         view.setHeight(mImageHeight);
-        view.setPadding(mPadding, 0, mPadding, 0);
+        view.setPadding(mImagePadding, 0, mImagePadding, 0);
         LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.MATCH_PARENT);
         if (index + 1 != count) {
             layoutParams.rightMargin = mMargin;
