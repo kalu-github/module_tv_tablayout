@@ -3,6 +3,6 @@
 /build
 /app/build
 /app/release
-/module_tablayout/build
+/module_tablayout_androidx/build
 /module_tablayout_v7/build
 local.properties
