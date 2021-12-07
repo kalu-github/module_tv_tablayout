@@ -43,6 +43,8 @@ public class TabLayout extends HorizontalScrollView {
     private int mTextSize = 10;
     private int mTextPadding = 0;
 
+    private int mImageWidthMax = 0;
+    private int mImageWidthMin = 0;
     private int mImageHeight = 0;
     private int mImagePadding = 0;
 
@@ -201,6 +203,8 @@ public class TabLayout extends HorizontalScrollView {
             mTextUnderlineWidth = attributes.getDimensionPixelOffset(R.styleable.TabLayout_tl_text_underline_width, 0);
             mTextUnderlineHeight = attributes.getDimensionPixelOffset(R.styleable.TabLayout_tl_text_underline_height, 0);
             mTextSize = attributes.getDimensionPixelOffset(R.styleable.TabLayout_tl_text_size, 10);
+            mImageWidthMin = attributes.getDimensionPixelOffset(R.styleable.TabLayout_tl_image_width_min, 0);
+            mImageWidthMax = attributes.getDimensionPixelOffset(R.styleable.TabLayout_tl_image_width_max, 0);
             mImageHeight = attributes.getDimensionPixelOffset(R.styleable.TabLayout_tl_image_height, 0);
             mImagePadding = attributes.getDimensionPixelOffset(R.styleable.TabLayout_tl_image_padding, 0);
         } catch (Exception e) {
@@ -470,6 +474,8 @@ public class TabLayout extends HorizontalScrollView {
                 TabUtil.updateImageUI(this, t, mBackgroundColorsRadius, focus, stay);
             }
         };
+        view.setWidthMin(mImageWidthMin);
+        view.setWidthMax(mImageWidthMax);
         view.setHeight(mImageHeight);
         view.setPadding(mImagePadding, 0, mImagePadding, 0);
         LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(0, getHeight());

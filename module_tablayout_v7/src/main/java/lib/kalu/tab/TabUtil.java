@@ -61,6 +61,12 @@ class TabUtil {
         if (null == t || null == view)
             return;
 
+        int placeholder = t.initImagePlaceholder();
+        try {
+            view.setImageResource(placeholder);
+        } catch (Exception e) {
+        }
+
         String[] urls = t.initImageSrcUrls();
         if (null == urls || urls.length < 3)
             return;

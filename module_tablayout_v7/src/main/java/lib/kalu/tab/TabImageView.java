@@ -16,6 +16,8 @@ import android.widget.ImageView;
 class TabImageView extends ImageView {
 
     private int mHeight = 0;
+    private int mWidthMax = 0;
+    private int mWidthMin = 0;
 
     //    public TabImageView(@NonNull Context context) {
 //        super(context);
@@ -29,8 +31,9 @@ class TabImageView extends ImageView {
 
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        int width;
+        int width = 0;
         int height = MeasureSpec.getSize(heightMeasureSpec);
+
         try {
             Drawable drawable = getDrawable();
             int intrinsicWidth = drawable.getIntrinsicWidth();
@@ -38,7 +41,12 @@ class TabImageView extends ImageView {
             TabUtil.logE("IMGonMeasure => intrinsicWidth = " + intrinsicWidth + ", intrinsicHeight =" + intrinsicHeight);
             width = height * intrinsicWidth / intrinsicHeight;
         } catch (Exception e) {
-            width = 0;
+        }
+
+        if (mWidthMin > 0 && width < mWidthMin) {
+            width = mWidthMin;
+        } else if (mWidthMax > 0 && width > mWidthMax) {
+            width = mWidthMax;
         }
 
         TabUtil.logE("IMGonMeasure => width = " + width + ", height =" + height);
@@ -111,6 +119,14 @@ class TabImageView extends ImageView {
 
     protected final void setHeight(int height) {
         this.mHeight = height;
+    }
+
+    protected final void setWidthMin(int min) {
+        this.mWidthMin = min;
+    }
+
+    protected final void setWidthMax(int max) {
+        this.mWidthMin = max;
     }
 
     /*************************/

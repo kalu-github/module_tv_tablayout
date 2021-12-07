@@ -4,6 +4,8 @@
         <attr name="tl_margin" format="reference|dimension" />
         <attr name="tl_background_colors_radius" format="reference|dimension" />
         <attr name="tl_image_height" format="reference|dimension" />
+        <attr name="tl_image_width_min" format="reference|dimension" />
+        <attr name="tl_image_width_max" format="reference|dimension" />
         <attr name="tl_image_padding" format="reference|dimension" />
         <attr name="tl_text_padding" format="reference|dimension" />
         <attr name="tl_text_size" format="reference|dimension" />
