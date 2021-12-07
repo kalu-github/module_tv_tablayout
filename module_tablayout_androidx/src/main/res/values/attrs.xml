@@ -1,5 +1,6 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <declare-styleable name="TabLayout">
+        <!-- 导航缩放 -->
         <attr name="tl_scale" format="reference|float" />
         <attr name="tl_padding" format="reference|dimension" />
         <attr name="tl_margin" format="reference|dimension" />
