@@ -41,15 +41,6 @@ public interface TabModel {
     String[] initTextBackgroundUrls();
 
     /**
-     * 0: 默认图片背景Assets图片
-     * 1：焦点图片背景Assets图片
-     * 2：选中图片背景Assets图片
-     *
-     * @return
-     */
-    String[] initTextBackgroundAssets();
-
-    /**
      * 0: 默认图片背景本地图片
      * 1：焦点图片背景本地图片
      * 2：选中图片背景本地图片
@@ -57,6 +48,15 @@ public interface TabModel {
      * @return
      */
     String[] initTextBackgroundFiles();
+
+    /**
+     * 0: 默认图片背景Assets图片
+     * 1：焦点图片背景Assets图片
+     * 2：选中图片背景Assets图片
+     *
+     * @return
+     */
+    String[] initTextBackgroundAssets();
 
     /**
      * 0: 默认文字背景本地图片

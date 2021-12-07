@@ -30,7 +30,6 @@ import lib.kalu.tab.model.TabModel;
 /**
  * TabLayout for TV
  */
-@SuppressLint("NewApi")
 public class TabLayout extends HorizontalScrollView {
 
     private float mScale = 1f;
@@ -171,7 +170,9 @@ public class TabLayout extends HorizontalScrollView {
         setPadding(0, 0, 0, 0);
         setDescendantFocusability(FOCUS_AFTER_DESCENDANTS);
         setSmoothScrollingEnabled(true);
-        setNestedScrollingEnabled(true);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            setNestedScrollingEnabled(true);
+        }
         setHorizontalScrollBarEnabled(false);
         setWillNotDraw(true);
         setLongClickable(false);
