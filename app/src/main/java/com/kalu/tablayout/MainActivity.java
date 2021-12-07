@@ -12,11 +12,11 @@ import android.view.View;
 import java.util.ArrayList;
 import java.util.Random;
 
-import lib.kalu.tab.TabLayout;
-import lib.kalu.tab.listener.OnTabChangeListener;
-import lib.kalu.tab.model.TabModel;
-import lib.kalu.tab.model.TabModelImage;
-import lib.kalu.tab.model.TabModelText;
+import lib.kalu.tv.tab.TabLayout;
+import lib.kalu.tv.tab.listener.OnTabChangeListener;
+import lib.kalu.tv.tab.model.TabModel;
+import lib.kalu.tv.tab.model.TabModelImage;
+import lib.kalu.tv.tab.model.TabModelText;
 
 public class MainActivity extends AppCompatActivity {
 

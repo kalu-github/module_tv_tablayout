@@ -23,7 +23,7 @@
             android:focusableInTouchMode="true"
             android:text="top" />
 
-        <lib.kalu.tab.TabLayout
+        <lib.kalu.tv.tab.TabLayout
             android:id="@+id/tab_plus"
             android:layout_width="match_parent"
             android:layout_height="60dp"
