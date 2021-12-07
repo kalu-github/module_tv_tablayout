@@ -445,7 +445,7 @@ public class TabLayout extends HorizontalScrollView {
         view.setUnderlineWidth(mTextUnderlineWidth);
         view.setUnderlineHeight(mTextUnderlineHeight);
         view.setPadding(mTextPadding, 0, mTextPadding, 0);
-        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.MATCH_PARENT);
+        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(0, getHeight());
         if (index + 1 != count) {
             layoutParams.rightMargin = mMargin;
         }
@@ -472,7 +472,7 @@ public class TabLayout extends HorizontalScrollView {
         };
         view.setHeight(mImageHeight);
         view.setPadding(mImagePadding, 0, mImagePadding, 0);
-        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.MATCH_PARENT);
+        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(0, getHeight());
         if (index + 1 != count) {
             layoutParams.rightMargin = mMargin;
         }

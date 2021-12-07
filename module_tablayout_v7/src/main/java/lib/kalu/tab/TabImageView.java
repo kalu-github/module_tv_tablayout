@@ -35,13 +35,13 @@ class TabImageView extends ImageView {
             Drawable drawable = getDrawable();
             int intrinsicWidth = drawable.getIntrinsicWidth();
             int intrinsicHeight = drawable.getIntrinsicHeight();
-//            LogUtils.e("AutoImageView", "onMeasure => intrinsicWidth = " + intrinsicWidth + ", intrinsicHeight = " + intrinsicHeight);
+            TabUtil.logE("IMGonMeasure => intrinsicWidth = " + intrinsicWidth + ", intrinsicHeight =" + intrinsicHeight);
             width = height * intrinsicWidth / intrinsicHeight;
         } catch (Exception e) {
             width = 0;
         }
 
-//        LogUtils.e("AutoImageView", "onMeasure => width = " + width + ", height = " + height);
+        TabUtil.logE("IMGonMeasure => width = " + width + ", height =" + height);
         setMeasuredDimension(width, height);
     }
 
@@ -78,16 +78,17 @@ class TabImageView extends ImageView {
 
             Bitmap bitmap = Bitmap.createBitmap(canvasWidth, canvasHeight, Bitmap.Config.ARGB_8888);
             Canvas canvas = new Canvas(bitmap);
-            TabUtil.logE("setImageDrawable => imgWidth = " + imgWidth + ", imgHeight =" + imgHeight);
-            TabUtil.logE("setImageDrawable => tabWidth = " + tabWidth + ", tabHeight =" + tabHeight);
-            TabUtil.logE("setImageDrawable => canvasWidth = " + canvasWidth + ", canvasHeight =" + canvasHeight);
+            TabUtil.logE("IMGsetImageDrawable => paddingLeft = " + paddingLeft + ", paddingRight =" + paddingRight);
+            TabUtil.logE("IMGsetImageDrawable => imgWidth = " + imgWidth + ", imgHeight =" + imgHeight);
+            TabUtil.logE("IMGsetImageDrawable => tabWidth = " + tabWidth + ", tabHeight =" + tabHeight);
+            TabUtil.logE("IMGsetImageDrawable => canvasWidth = " + canvasWidth + ", canvasHeight =" + canvasHeight);
             // 裁剪
             Rect src = new Rect(0, 0, imgWidth, imgHeight);
             // 坐标
-            int left = canvasWidth / 5;
-            int right = left * 4;
-            int top = canvasHeight / 5;
-            int bottom = top * 4;
+            int left = canvasWidth / 10;
+            int right = left * 9;
+            int top = canvasHeight / 10;
+            int bottom = top * 9;
             RectF dst = new RectF(left, top, right, bottom);
             Bitmap temp = ((BitmapDrawable) drawable).getBitmap();
             canvas.drawBitmap(temp, src, dst, null);
