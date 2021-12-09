@@ -613,11 +613,6 @@ public class TabLayout extends HorizontalScrollView {
     }
 
     @Keep
-    public final int getSelect() {
-        return getIndex();
-    }
-
-    @Keep
     public final int getCount() {
         try {
             View container = getContainer();
@@ -625,6 +620,33 @@ public class TabLayout extends HorizontalScrollView {
         } catch (Exception e) {
             return 0;
         }
+    }
+
+    @Keep
+    public final int getSelectIndex() {
+        return getIndex();
+    }
+
+    @Keep
+    public final View getSelectChild() {
+        try {
+            View container = getContainer();
+            int select = getSelectIndex();
+            return ((LinearLayout) container).getChildAt(select);
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    @Keep
+    public final void focus(@IntRange(from = 0, to = Integer.MAX_VALUE) int next, boolean notify, boolean anim) {
+
+        int before = getIndex();
+        TabUtil.logE("focus => before = " + before + ", next = " + next);
+        if (anim) {
+            anim(false);
+        }
+        scroll(before, next, notify, false, before == next);
     }
 
     /************************************/
