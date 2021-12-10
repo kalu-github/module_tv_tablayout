@@ -47,6 +47,8 @@ public class TabLayout extends HorizontalScrollView {
     private int mImageHeight = 0;
     private int mImagePadding = 0;
 
+    private boolean mForce = false;
+
     public TabLayout(Context context) {
         super(context);
         init(null);
@@ -140,9 +142,13 @@ public class TabLayout extends HorizontalScrollView {
         }
         // left
         else if (event.getAction() == KeyEvent.ACTION_UP && event.getKeyCode() == KeyEvent.KEYCODE_DPAD_LEFT) {
-            scroll(View.FOCUS_LEFT, false, false);
-            TabUtil.logE("dispatchKeyEvent[left] =>");
-            return true;
+            TabUtil.logE("dispatchKeyEvent[left] => mForce = " + mForce);
+            if (!mForce) {
+                scroll(View.FOCUS_LEFT, false, false);
+                return true;
+            } else {
+                mForce = false;
+            }
         }
         // right repeat
         else if (event.getRepeatCount() > 0 && event.getKeyCode() == KeyEvent.KEYCODE_DPAD_RIGHT) {
@@ -159,9 +165,13 @@ public class TabLayout extends HorizontalScrollView {
         }
         // right
         else if (event.getAction() == KeyEvent.ACTION_UP && event.getKeyCode() == KeyEvent.KEYCODE_DPAD_RIGHT) {
-            scroll(View.FOCUS_RIGHT, false, false);
-            TabUtil.logE("dispatchKeyEvent[right] =>");
-            return true;
+            TabUtil.logE("dispatchKeyEvent[right] => mForce = " + mForce);
+            if (!mForce) {
+                scroll(View.FOCUS_RIGHT, false, false);
+                return true;
+            } else {
+                mForce = false;
+            }
         }
         return super.dispatchKeyEvent(event);
     }
@@ -542,6 +552,7 @@ public class TabLayout extends HorizontalScrollView {
         if (anim) {
             anim(false);
         }
+
         scroll(before, next, notify, false, before == next);
     }
 
@@ -570,6 +581,8 @@ public class TabLayout extends HorizontalScrollView {
         if (index < 0) {
             index = 0;
         }
+
+        mForce = true;
         select(index, true, anim);
     }
 
@@ -603,6 +616,8 @@ public class TabLayout extends HorizontalScrollView {
         if (index >= count) {
             index = count - 1;
         }
+
+        mForce = true;
         select(index, true, anim);
     }
 
