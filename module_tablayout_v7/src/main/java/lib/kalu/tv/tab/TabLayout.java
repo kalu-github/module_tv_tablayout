@@ -3,6 +3,7 @@ package lib.kalu.tv.tab;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Color;
+import android.graphics.Rect;
 import android.os.Build;
 import android.support.annotation.IntRange;
 import android.support.annotation.Keep;
@@ -46,8 +47,6 @@ public class TabLayout extends HorizontalScrollView {
     private int mImageWidthMin = 0;
     private int mImageHeight = 0;
     private int mImagePadding = 0;
-
-    private boolean mForce = false;
 
     public TabLayout(Context context) {
         super(context);
@@ -109,19 +108,23 @@ public class TabLayout extends HorizontalScrollView {
     @Override
     public boolean dispatchKeyEvent(KeyEvent event) {
         if (event.getAction() == KeyEvent.ACTION_DOWN && event.getKeyCode() == KeyEvent.KEYCODE_DPAD_UP) {
+            setActivated(false);
             anim(true);
             scroll(View.FOCUS_UP, true, false);
             TabUtil.logE("dispatchKeyEvent[up-leave] =>");
         } else if (event.getAction() == KeyEvent.ACTION_UP && event.getKeyCode() == KeyEvent.KEYCODE_DPAD_UP) {
+            setActivated(true);
             anim(false);
             scroll(View.FOCUS_UP, false, true);
             TabUtil.logE("dispatchKeyEvent[up-come] =>");
             return true;
         } else if (event.getAction() == KeyEvent.ACTION_DOWN && event.getKeyCode() == KeyEvent.KEYCODE_DPAD_DOWN) {
+            setActivated(false);
             anim(true);
             scroll(View.FOCUS_DOWN, true, false);
             TabUtil.logE("dispatchKeyEvent[down-leave] =>");
         } else if (event.getAction() == KeyEvent.ACTION_UP && event.getKeyCode() == KeyEvent.KEYCODE_DPAD_DOWN) {
+            setActivated(true);
             anim(false);
             scroll(View.FOCUS_DOWN, false, true);
             TabUtil.logE("dispatchKeyEvent[down-come] =>");
@@ -134,20 +137,20 @@ public class TabLayout extends HorizontalScrollView {
         }
         // left outside
         else if (event.getAction() == KeyEvent.ACTION_DOWN && event.getKeyCode() == KeyEvent.KEYCODE_DPAD_LEFT) {
-            boolean outside = isOutside(true);
-            if (outside) {
+            int index = getSelectIndex();
+            if (index <= 0) {
                 TabUtil.logE("dispatchKeyEvent[left-outside] =>");
                 return true;
             }
         }
         // left
         else if (event.getAction() == KeyEvent.ACTION_UP && event.getKeyCode() == KeyEvent.KEYCODE_DPAD_LEFT) {
-            TabUtil.logE("dispatchKeyEvent[left] => mForce = " + mForce);
-            if (!mForce) {
+            TabUtil.logE("dispatchKeyEvent[left] => isActivated = " + isActivated());
+            if (isActivated()) {
                 scroll(View.FOCUS_LEFT, false, false);
                 return true;
             } else {
-                mForce = false;
+                setActivated(true);
             }
         }
         // right repeat
@@ -157,20 +160,21 @@ public class TabLayout extends HorizontalScrollView {
         }
         // right outside
         else if (event.getAction() == KeyEvent.ACTION_DOWN && event.getKeyCode() == KeyEvent.KEYCODE_DPAD_RIGHT) {
-            boolean outside = isOutside(false);
-            if (outside) {
+            int index = getSelectIndex();
+            int count = getCount();
+            if (index + 1 >= count) {
                 TabUtil.logE("dispatchKeyEvent[right-outside] =>");
                 return true;
             }
         }
         // right
         else if (event.getAction() == KeyEvent.ACTION_UP && event.getKeyCode() == KeyEvent.KEYCODE_DPAD_RIGHT) {
-            TabUtil.logE("dispatchKeyEvent[right] => mForce = " + mForce);
-            if (!mForce) {
+            TabUtil.logE("dispatchKeyEvent[right] => isActivated = " + isActivated());
+            if (isActivated()) {
                 scroll(View.FOCUS_RIGHT, false, false);
                 return true;
             } else {
-                mForce = false;
+                setActivated(true);
             }
         }
         return super.dispatchKeyEvent(event);
@@ -224,28 +228,6 @@ public class TabLayout extends HorizontalScrollView {
         }
     }
 
-    private final boolean isOutside(boolean left) {
-
-        View container = getContainer();
-        if (null == container || !(container instanceof LinearLayout))
-            return false;
-
-        int count = ((LinearLayout) container).getChildCount();
-        int index = getIndex();
-        TabUtil.logE("isOutside => count = " + count + ", index = " + index);
-
-        // 左边界
-        if (left && index <= 0) {
-            return true;
-        }
-        // 右边界
-        else if (!left && index + 1 >= count) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-
     private final void anim(boolean over) {
         if (mScale <= 1f)
             return;
@@ -267,15 +249,38 @@ public class TabLayout extends HorizontalScrollView {
     }
 
     /**
+     * 强制选中tab
+     *
+     * @param next   新索引位置
+     * @param callback 开启通知
+     * @param anim   开启动画
+     */
+    @Keep
+    private final void select(@IntRange(from = 0, to = Integer.MAX_VALUE) int next, boolean callback, boolean anim, boolean ignore, boolean activated) {
+
+        int before = getIndex();
+        TabUtil.logE("select => before = " + before + ", next = " + next);
+        if (!ignore && before == next)
+            return;
+
+        if (anim) {
+            anim(false);
+        }
+
+        setActivated(activated);
+        scroll(before, next, callback, false, before == next);
+    }
+
+    /**
      * 强制选中
      *
      * @param before 旧索引位置
      * @param next   新索引位置
-     * @param notify 通知
+     * @param callback 通知
      * @param leave  离开
      * @param repeat 重复
      */
-    private final void scroll(@IntRange(from = 0, to = Integer.MAX_VALUE) int before, @IntRange(from = 0, to = Integer.MAX_VALUE) int next, boolean notify, boolean leave, boolean repeat) {
+    private final void scroll(@IntRange(from = 0, to = Integer.MAX_VALUE) int before, @IntRange(from = 0, to = Integer.MAX_VALUE) int next, boolean callback, boolean leave, boolean repeat) {
         if (next < 0)
             return;
         View container = getContainer();
@@ -284,7 +289,7 @@ public class TabLayout extends HorizontalScrollView {
             return;
 
         updateIndex(next);
-        updateFocus(before, next, notify, leave, repeat);
+        updateFocus(before, next, callback, leave, repeat);
     }
 
     /**
@@ -317,45 +322,17 @@ public class TabLayout extends HorizontalScrollView {
         }
     }
 
-//    private final void setEnabled(@IntRange(from = 0, to = Integer.MAX_VALUE) int before, @IntRange(from = 0, to = Integer.MAX_VALUE) int next, boolean enabled) {
-//        super.setEnabled(enabled);
-//        TabUtil.logE("setEnabled => enabled = " + enabled + ", before = " + before + ", next = " + next);
-//
-//        if (null != view && next != before) {
-//            int left = view.getLeft();
-//            scrollTo(left,  getY());
-//        }
-//
-//        //        if (enabled) {
-////            View container = getContainer();
-////            if (null == container || !(container instanceof LinearLayout))
-////                return;
-////            int count = ((LinearLayout) container).getChildCount();
-////            if (count == 0)
-////                return;
-////            int index = getIndex();
-////            if (index < 0) {
-////                index = 0;
-////            }
-//////            ((LinearLayout) container).getChildAt(index).requestFocus();
-////            View focus = ((LinearLayout) container).getChildAt(index);
-////            int left = focus.getLeft();
-////            scrollTo(left,  getY());
-//////            requestChildFocus(focus, focus);
-////        }
-//    }
-
     /**
      * 更新焦点状态
      *
      * @param before 旧索引位置
      * @param next   新索引位置
-     * @param notify 通知
+     * @param callback 通知
      * @param leave  离开
      * @param repeat 重复
      */
-    private final void updateFocus(@IntRange(from = 0, to = Integer.MAX_VALUE) int before, @IntRange(from = 0, to = Integer.MAX_VALUE) int next, boolean notify, boolean leave, boolean repeat) {
-        TabUtil.logE("updateFocus => before = " + before + ", next = " + next + ", notify = " + notify + ", leave = " + leave + ", repeat = " + repeat);
+    private final void updateFocus(@IntRange(from = 0, to = Integer.MAX_VALUE) int before, @IntRange(from = 0, to = Integer.MAX_VALUE) int next, boolean callback, boolean leave, boolean repeat) {
+        TabUtil.logE("updateFocus => before = " + before + ", next = " + next + ", callback = " + callback + ", leave = " + leave + ", repeat = " + repeat);
         setEnabled(leave ? false : true);
         View container = getContainer();
         int count = ((LinearLayout) container).getChildCount();
@@ -387,12 +364,12 @@ public class TabLayout extends HorizontalScrollView {
                         ((TabImageView) view).refresh(true, leave);
                     }
 
-                    if (notify && null != mOnTabChangeListener) {
+                    if (callback && null != mOnTabChangeListener) {
                         if (repeat) {
                             mOnTabChangeListener.onRepeat(next);
                         } else if (leave) {
                             mOnTabChangeListener.onLeave(next);
-                        } else if (notify) {
+                        } else {
                             mOnTabChangeListener.onSelect(next);
                         }
                     }
@@ -406,7 +383,7 @@ public class TabLayout extends HorizontalScrollView {
                     } else if (view instanceof TabImageView) {
                         ((TabImageView) view).refresh(false, false);
                     }
-                    if (notify && null != mOnTabChangeListener) {
+                    if (callback && null != mOnTabChangeListener) {
                         mOnTabChangeListener.onBefore(before);
                     }
                 }
@@ -530,33 +507,6 @@ public class TabLayout extends HorizontalScrollView {
     }
 
     @Keep
-    public final void select(@IntRange(from = 0, to = Integer.MAX_VALUE) int next) {
-        select(next, true, false);
-    }
-
-    /**
-     * 强制选中tab
-     *
-     * @param next   新索引位置
-     * @param notify 开启通知
-     * @param anim   开启动画
-     */
-    @Keep
-    public final void select(@IntRange(from = 0, to = Integer.MAX_VALUE) int next, boolean notify, boolean anim) {
-
-        int before = getIndex();
-        TabUtil.logE("select => before = " + before + ", next = " + next);
-        if (before == next)
-            return;
-
-        if (anim) {
-            anim(false);
-        }
-
-        scroll(before, next, notify, false, before == next);
-    }
-
-    @Keep
     public final void left() {
         left(1, false);
     }
@@ -582,8 +532,7 @@ public class TabLayout extends HorizontalScrollView {
             index = 0;
         }
 
-        mForce = true;
-        select(index, true, anim);
+        select(index, true, anim, false, false);
     }
 
     @Keep
@@ -617,8 +566,7 @@ public class TabLayout extends HorizontalScrollView {
             index = count - 1;
         }
 
-        mForce = true;
-        select(index, true, anim);
+        select(index, true, anim, false, false);
     }
 
     @Keep
@@ -654,14 +602,18 @@ public class TabLayout extends HorizontalScrollView {
     }
 
     @Keep
-    public final void focus(@IntRange(from = 0, to = Integer.MAX_VALUE) int next, boolean notify, boolean anim) {
+    public final void select(@IntRange(from = 0, to = Integer.MAX_VALUE) int next) {
+        select(next, true, false, false, true);
+    }
 
-        int before = getIndex();
-        TabUtil.logE("focus => before = " + before + ", next = " + next);
-        if (anim) {
-            anim(false);
-        }
-        scroll(before, next, notify, false, before == next);
+    @Keep
+    public final void select(@IntRange(from = 0, to = Integer.MAX_VALUE) int next, boolean ignore) {
+        select(next, true, false, ignore, true);
+    }
+
+    @Keep
+    public final void select(@IntRange(from = 0, to = Integer.MAX_VALUE) int next, boolean callback,  boolean ignore) {
+        select(next, callback, false, ignore, true);
     }
 
     /************************************/

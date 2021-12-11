@@ -40,8 +40,8 @@ class TabUtil {
 
     public static final void logE(@NonNull String message) {
 
-        if (!BuildConfig.DEBUG)
-            return;
+//        if (!BuildConfig.DEBUG)
+//            return;
 
         if (null == message || message.length() == 0)
             return;

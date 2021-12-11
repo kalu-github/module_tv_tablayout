@@ -76,10 +76,10 @@ public class MainActivity extends AppCompatActivity {
                         return s;
                     }
 
-                    @Override
-                    public int[] initTextColors() {
-                        return new int[]{Color.BLACK, Color.WHITE, Color.GREEN};
-                    }
+//                    @Override
+//                    public int[] initTextColors() {
+//                        return new int[]{Color.BLACK, Color.WHITE, Color.GREEN};
+//                    }
 
 //                    @Override
 //                    public int[][] initTextBackgroundColors() {
