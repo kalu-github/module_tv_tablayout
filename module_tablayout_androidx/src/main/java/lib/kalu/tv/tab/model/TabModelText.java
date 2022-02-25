@@ -4,7 +4,7 @@ import android.graphics.Color;
 
 import androidx.annotation.Keep;
 
-import lib.kalu.tv.tab.R;
+import lib.kalu.tv.R;
 
 @Keep
 public abstract class TabModelText implements TabModel {
@@ -26,6 +26,11 @@ public abstract class TabModelText implements TabModel {
 
     @Override
     public String[] initImageSrcUrls() {
+        return null;
+    }
+
+    @Override
+    public String[] initImageBackgroundFiles() {
         return null;
     }
 

@@ -7,4 +7,4 @@ dependencyResolutionManagement {
 }
 include ':app'
 include ':module_tablayout_androidx'
-include ':module_tablayout_v7'
+//include ':module_tablayout_v7'

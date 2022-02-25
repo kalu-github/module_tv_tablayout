@@ -26,6 +26,7 @@ import java.util.Arrays;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import lib.kalu.tv.R;
 import lib.kalu.tv.tab.ninepatch.NinePatchChunk;
 import lib.kalu.tv.tab.model.TabModel;
 
@@ -39,8 +40,8 @@ class TabUtil {
 
     public static final void logE(@NonNull String message) {
 
-        if (!BuildConfig.DEBUG)
-            return;
+//        if (!BuildConfig.DEBUG)
+//            return;
 
         if (null == message || message.length() == 0)
             return;
@@ -62,6 +63,12 @@ class TabUtil {
         if (null == t || null == view)
             return;
 
+        int placeholder = t.initImagePlaceholder();
+        try {
+            view.setImageResource(placeholder);
+        } catch (Exception e) {
+        }
+
         String[] urls = t.initImageSrcUrls();
         if (null == urls || urls.length < 3)
             return;
@@ -78,6 +85,8 @@ class TabUtil {
         logE("updateImageBackground => ************************");
         String[] urls = t.initImageBackgroundUrls();
         logE("updateImageBackground => urls = " + Arrays.toString(urls));
+        String[] files = t.initImageBackgroundFiles();
+        logE("updateImageBackground => files = " + Arrays.toString(files));
         String[] assets = t.initImageBackgroundAssets();
         logE("updateImageBackground => assets = " + Arrays.toString(assets));
         int[] resources = t.initImageBackgroundResources();
@@ -92,13 +101,19 @@ class TabUtil {
             setBackgroundGradient(view, color, radius);
         }
         // 背景 => 网络图片
-        else if (null != urls && urls.length >= 3) {
+        else if (null != urls && urls.length >= 3 && (null != urls[0] || null != urls[1] || null != urls[2])) {
             String url = stay ? urls[2] : (focus ? urls[1] : urls[0]);
             logE("updateImageBackground[urls]=> url = " + url);
             loadImageUrl(view, url, true);
         }
+        // 背景 => 本地图片
+        else if (null != files && files.length >= 3 && (null != files[0] || null != files[1] || null != files[2])) {
+            String file = stay ? files[2] : (focus ? files[1] : files[0]);
+            logE("updateImageBackground[files]=> file = " + file);
+            setBackgroundFile(view, file, true);
+        }
         // 背景 => Assets图片
-        else if (null != assets && assets.length >= 3) {
+        else if (null != assets && assets.length >= 3 && (null != assets[0] || null != assets[1] || null != assets[2])) {
             String asset = stay ? assets[2] : (focus ? assets[1] : assets[0]);
             logE("updateImageBackground[assets]=> asset = " + asset);
             setBackgroundAssets(view, asset, true);
@@ -175,19 +190,19 @@ class TabUtil {
             setBackgroundGradient(view, color, radius);
         }
         // 背景 => 网络图片
-        else if (null != urls && urls.length >= 3) {
+        else if (null != urls && urls.length >= 3 && (null != urls[0] || null != urls[1] || null != urls[2])) {
             String url = stay ? urls[2] : (focus ? urls[1] : urls[0]);
             logE("updateTextBackground[urls]=> url = " + url + ", text = " + view.getText());
             loadImageUrl(view, url, true);
         }
         // 背景 => 本地图片
-        else if (null != files && files.length >= 3) {
+        else if (null != files && files.length >= 3 && (null != files[0] || null != files[1] || null != files[2])) {
             String file = stay ? files[2] : (focus ? files[1] : files[0]);
             logE("updateTextBackground[files]=> file = " + file + ", text = " + view.getText());
             setBackgroundFile(view, file, true);
         }
         // 背景 => Assets图片
-        else if (null != assets && assets.length >= 3) {
+        else if (null != assets && assets.length >= 3 && (null != assets[0] || null != assets[1] || null != assets[2])) {
             String path = stay ? assets[2] : (focus ? assets[1] : assets[0]);
             logE("updateTextBackground[assets]=> assets = " + path + ", text = " + view.getText());
             setBackgroundAssets(view, path, true);

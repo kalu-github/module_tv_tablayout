@@ -2,14 +2,29 @@
     <declare-styleable name="TabLayout">
         <!-- 导航缩放 -->
         <attr name="tl_scale" format="reference|float" />
-        <attr name="tl_padding" format="reference|dimension" />
+        <!-- 外边距 -->
         <attr name="tl_margin" format="reference|dimension" />
+        <!-- 背景渐变色圆角 -->
         <attr name="tl_background_colors_radius" format="reference|dimension" />
+        <!-- 图片高度 -->
         <attr name="tl_image_height" format="reference|dimension" />
+        <!-- 图片最小宽度 -->
+        <attr name="tl_image_width_min" format="reference|dimension" />
+        <!-- 图片最大宽度 -->
+        <attr name="tl_image_width_max" format="reference|dimension" />
+        <!-- 图片内边距 -->
+        <attr name="tl_image_padding" format="reference|dimension" />
+        <!-- 文字内边距 -->
+        <attr name="tl_text_padding" format="reference|dimension" />
+        <!-- 文字大小 -->
         <attr name="tl_text_size" format="reference|dimension" />
+        <!-- 文字下划线 -->
         <attr name="tl_text_underline" format="reference|boolean" />
+        <!-- 文字下划线颜色 -->
         <attr name="tl_text_underline_color" format="reference|color" />
-        <attr name="tl_text_underline_height" format="reference|dimension" />
+        <!-- 文字下划线宽度 -->
         <attr name="tl_text_underline_width" format="reference|dimension" />
+        <!-- 文字下划线高度 -->
+        <attr name="tl_text_underline_height" format="reference|dimension" />
     </declare-styleable>
 </resources>

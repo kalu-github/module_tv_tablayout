@@ -2,7 +2,7 @@ package lib.kalu.tv.tab.model;
 
 import androidx.annotation.Keep;
 
-import lib.kalu.tv.tab.R;
+import lib.kalu.tv.R;
 
 @Keep
 public abstract class TabModelImage implements TabModel {
@@ -55,6 +55,11 @@ public abstract class TabModelImage implements TabModel {
 
     @Override
     public String[] initImageBackgroundUrls() {
+        return null;
+    }
+
+    @Override
+    public String[] initImageBackgroundFiles() {
         return null;
     }
 
